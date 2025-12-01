@@ -1,6 +1,6 @@
 //
-//  huda_newApp.swift
-//  huda_new
+//  hudaApp.swift
+//  huda
 //
 //  Created by Ali Macky on 11/30/25.
 //
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct huda_newApp: App {
+struct hudaApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

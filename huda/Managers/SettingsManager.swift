@@ -1,6 +1,6 @@
 //
 //  SettingsManager.swift
-//  huda_new
+//  huda
 //
 //  Created by Ali Macky on 11/30/25.
 //

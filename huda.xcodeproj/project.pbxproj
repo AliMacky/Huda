@@ -11,13 +11,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		41FB85752EDD2E4900F31323 /* huda_new.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = huda_new.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		41FB85752EDD2E4900F31323 /* huda.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = huda.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		41FB85772EDD2E4900F31323 /* huda_new */ = {
+		41FB85772EDD2E4900F31323 /* huda */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = huda_new;
+			path = huda;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -37,7 +37,7 @@
 		41FB856C2EDD2E4900F31323 = {
 			isa = PBXGroup;
 			children = (
-				41FB85772EDD2E4900F31323 /* huda_new */,
+				41FB85772EDD2E4900F31323 /* huda */,
 				41FB85762EDD2E4900F31323 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -45,7 +45,7 @@
 		41FB85762EDD2E4900F31323 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				41FB85752EDD2E4900F31323 /* huda_new.app */,
+				41FB85752EDD2E4900F31323 /* huda.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -53,9 +53,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		41FB85742EDD2E4900F31323 /* huda_new */ = {
+		41FB85742EDD2E4900F31323 /* huda */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 41FB85802EDD2E4A00F31323 /* Build configuration list for PBXNativeTarget "huda_new" */;
+			buildConfigurationList = 41FB85802EDD2E4A00F31323 /* Build configuration list for PBXNativeTarget "huda" */;
 			buildPhases = (
 				41FB85712EDD2E4900F31323 /* Sources */,
 				41FB85722EDD2E4900F31323 /* Frameworks */,
@@ -66,14 +66,14 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				41FB85772EDD2E4900F31323 /* huda_new */,
+				41FB85772EDD2E4900F31323 /* huda */,
 			);
-			name = huda_new;
+			name = huda;
 			packageProductDependencies = (
 				41FB85842EDD302D00F31323 /* Adhan */,
 			);
 			productName = huda_new;
-			productReference = 41FB85752EDD2E4900F31323 /* huda_new.app */;
+			productReference = 41FB85752EDD2E4900F31323 /* huda.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -91,7 +91,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 41FB85702EDD2E4900F31323 /* Build configuration list for PBXProject "huda_new" */;
+			buildConfigurationList = 41FB85702EDD2E4900F31323 /* Build configuration list for PBXProject "huda" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -108,7 +108,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				41FB85742EDD2E4900F31323 /* huda_new */,
+				41FB85742EDD2E4900F31323 /* huda */,
 			);
 		};
 /* End PBXProject section */
@@ -136,7 +136,7 @@
 /* Begin XCBuildConfiguration section */
 		41FB857E2EDD2E4A00F31323 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReferenceAnchor = 41FB85772EDD2E4900F31323 /* huda_new */;
+			baseConfigurationReferenceAnchor = 41FB85772EDD2E4900F31323 /* huda */;
 			baseConfigurationReferenceRelativePath = Secrets.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -202,7 +202,7 @@
 		};
 		41FB857F2EDD2E4A00F31323 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReferenceAnchor = 41FB85772EDD2E4900F31323 /* huda_new */;
+			baseConfigurationReferenceAnchor = 41FB85772EDD2E4900F31323 /* huda */;
 			baseConfigurationReferenceRelativePath = Secrets.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -261,7 +261,7 @@
 		};
 		41FB85812EDD2E4A00F31323 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReferenceAnchor = 41FB85772EDD2E4900F31323 /* huda_new */;
+			baseConfigurationReferenceAnchor = 41FB85772EDD2E4900F31323 /* huda */;
 			baseConfigurationReferenceRelativePath = Secrets.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -271,7 +271,7 @@
 				DEVELOPMENT_TEAM = G93783A669;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "huda-new-Info.plist";
+				INFOPLIST_FILE = "huda-Info.plist";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Huda needs to access your location to calculate prayer times and the qibla direction.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -283,7 +283,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.alimacky.huda-new";
+				PRODUCT_BUNDLE_IDENTIFIER = com.alimacky.huda;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -297,7 +297,7 @@
 		};
 		41FB85822EDD2E4A00F31323 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReferenceAnchor = 41FB85772EDD2E4900F31323 /* huda_new */;
+			baseConfigurationReferenceAnchor = 41FB85772EDD2E4900F31323 /* huda */;
 			baseConfigurationReferenceRelativePath = Secrets.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -307,7 +307,7 @@
 				DEVELOPMENT_TEAM = G93783A669;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "huda-new-Info.plist";
+				INFOPLIST_FILE = "huda-Info.plist";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Huda needs to access your location to calculate prayer times and the qibla direction.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -319,7 +319,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.alimacky.huda-new";
+				PRODUCT_BUNDLE_IDENTIFIER = com.alimacky.huda;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -334,7 +334,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		41FB85702EDD2E4900F31323 /* Build configuration list for PBXProject "huda_new" */ = {
+		41FB85702EDD2E4900F31323 /* Build configuration list for PBXProject "huda" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				41FB857E2EDD2E4A00F31323 /* Debug */,
@@ -343,7 +343,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		41FB85802EDD2E4A00F31323 /* Build configuration list for PBXNativeTarget "huda_new" */ = {
+		41FB85802EDD2E4A00F31323 /* Build configuration list for PBXNativeTarget "huda" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				41FB85812EDD2E4A00F31323 /* Debug */,
