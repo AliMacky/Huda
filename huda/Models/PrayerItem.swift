@@ -2,7 +2,7 @@
  * Huda – Islamic iOS app for prayer times and Qibla direction
  * Copyright (C) 2025  Ali Macky
  *
- * MadhabPreference.swift
+ * PrayerItem.swift
  * This file is part of Huda.
  *
  * Huda is free software: you can redistribute it and/or modify
@@ -22,23 +22,22 @@
 import Foundation
 import Adhan
 
-enum MadhabPreference: String, CaseIterable, Identifiable {
-    case shafi
-    case hanafi
-    
-    var id: String { self.rawValue }
-    
-    var displayName: String {
-        switch self {
-        case .shafi: return "Standard (Shafi, Maliki, Hanbali)"
-        case .hanafi: return "Hanafi"
-        }
-    }
-    
-    var packageValue: Madhab {
-        switch self {
-        case .shafi: return .shafi
-        case .hanafi: return .hanafi
-        }
+struct PrayerItem: Identifiable {
+    let id = UUID()
+    let name: String
+    let time: String
+    let arabicName: String
+    let passed: Bool
+    let icon: String
+}
+
+func arabicName(for prayer: Adhan.Prayer) -> String {
+    switch prayer {
+    case .fajr: return "الفجر"
+    case .sunrise: return "الشروق"
+    case .dhuhr: return "الظهر"
+    case .asr: return "العصر"
+    case .maghrib: return "المغرب"
+    case .isha: return "العشاء"
     }
 }

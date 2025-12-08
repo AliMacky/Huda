@@ -2,9 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>Masjidi Api Base Url</key>
-	<string>$(MASJIDI_API_BASE_URL)</string>
-	<key>Masjidi Api Key</key>
-	<string>$(MASJIDI_API_KEY)</string>
+	<key>Masjidal Api Base Url</key>
+	<string>$(MASJIDAL_API_BASE_URL)</string>
 </dict>
 </plist>

@@ -24,9 +24,15 @@ import SwiftUI
 
 @main
 struct hudaApp: App {
+    private var settingsManager = SettingsManager.shared
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if settingsManager.onboardingComplete {
+                ContentView()
+            } else {
+                OnboardingView()
+            }
         }
     }
 }

@@ -23,21 +23,81 @@
 import SwiftUI
 import Adhan
 
-struct ContentView: View {
-    var locationManager = LocationManager.shared
-    var prayerManager = PrayerManager.shared
-    var settingsManager = SettingsManager.shared
-    var mosqueManager = MosqueManager.shared
+enum Tab: String, CaseIterable, Identifiable {
+    case home = "house.fill"
+    case times = "clock.fill"
+    case qibla = "location.fill"
     
-    @State var searchText: String = ""
+    var id: String { rawValue }
+    
+    var title: String {
+        switch self {
+        case .home: return "Home"
+        case .times: return "Times"
+        case .qibla: return "Qibla"
+        }
+    }
+}
+
+struct ContentView: View {
+    @State private var selectedTab: Tab = .home
     
     var body: some View {
-        VStack {
-            Text("Huda \(AppInfo.fullVersionString)")
+        ZStack {
+            Color("AppBackground").ignoresSafeArea()
+            
+            VStack (spacing: 0) {
+                Group {
+                    switch selectedTab {
+                    case .home:
+                        NavigationStack {
+                            HomeView()
+                                .background(Color("AppBackground").ignoresSafeArea())
+                        }
+                    case .times:
+                        Text("Times View")
+                    case .qibla:
+                        Text("Qibla View")
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                
+                TabBar(selected: $selectedTab)
+            }
         }
-        .padding()
     }
+}
+
+struct TabBar: View {
+    @Binding var selected: Tab
     
+    var body: some View {
+        HStack(spacing: 0) {
+            ForEach(Tab.allCases) { tab in
+                Button {
+                    withAnimation(.easeInOut(duration: 0.1)) {
+                        selected = tab
+                    }
+                } label: {
+                    VStack(spacing: 4) {
+                        Image(systemName: tab.rawValue)
+                            .font(.system(size: 20))
+                        
+                        Text(tab.title)
+                            .font(.caption2)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .foregroundStyle(selected == tab ? Color("AccentTeal") : Color("SecondaryText"))
+                }
+            }
+        }
+        .padding(.vertical, 12)
+        .background(
+            RoundedRectangle(cornerRadius: 24)
+                .fill(Color("CardBackground"))
+        )
+        .padding(.horizontal, 24)
+    }
 }
 
 #Preview {

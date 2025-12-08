@@ -22,6 +22,7 @@
 import Foundation
 import CoreLocation
 import SwiftUI
+import MapKit
 
 @Observable
 class LocationManager: NSObject, CLLocationManagerDelegate {
@@ -29,6 +30,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     private let manager = CLLocationManager()
     
     var location: CLLocationCoordinate2D?
+    var locationTitle: String?
     var status: CLAuthorizationStatus = .notDetermined
     
     override private init() {
@@ -58,6 +60,13 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         guard let latestLocation = locations.last else {return}
         self.location = latestLocation.coordinate
         
+        Task {
+            let title = try await latestLocation.fetchCityWithContext()
+            await MainActor.run {
+                locationTitle = title
+            }
+        }
+        
         PrayerManager.shared.calculatePrayers(at: latestLocation.coordinate)
         PrayerManager.shared.calculateQibla(at: latestLocation.coordinate)
     }
@@ -66,3 +75,14 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         print("Location Error: \(error.localizedDescription)")
     }
 }
+
+extension CLLocation {
+    func fetchCityWithContext() async throws -> (String) {
+        guard let request = MKReverseGeocodingRequest(location: self),
+              let addressRepresentations = try await request.mapItems.first?.addressRepresentations else {
+            throw MKError(.decodingFailed)
+        }
+        return (addressRepresentations.cityWithContext ?? "")
+    }
+}
+
