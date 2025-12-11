@@ -32,12 +32,15 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     var location: CLLocationCoordinate2D?
     var locationTitle: String?
     var status: CLAuthorizationStatus = .notDetermined
+    var heading: Double = 0.0
+    var headingAccuracy: Double = -1
     
     override private init() {
         super.init()
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyKilometer
         manager.distanceFilter = 1000
+        manager.headingFilter = 1
     }
     
     func requestPermission() {
@@ -71,8 +74,25 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         PrayerManager.shared.calculateQibla(at: latestLocation.coordinate)
     }
     
+    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        self.headingAccuracy = newHeading.headingAccuracy
+        if newHeading.headingAccuracy >= 0 {
+            self.heading = newHeading.magneticHeading
+        }
+    }
+    
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Location Error: \(error.localizedDescription)")
+    }
+    
+    func startUpdatingHeading() {
+        if CLLocationManager.headingAvailable() {
+            manager.startUpdatingHeading()
+        }
+    }
+    
+    func stopUpdatingHeading() {
+        manager.stopUpdatingHeading()
     }
 }
 

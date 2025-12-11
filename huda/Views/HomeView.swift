@@ -138,7 +138,7 @@ struct HomeView: View {
             }
             .padding(.horizontal, 24)
             .padding(.top, 10)
-            .padding(.bottom, 40)
+            .padding(.bottom, 100)
             .onAppear {
                 locationManager.requestPermission()
                 if let savedMosque = settingsManager.selectedMosque {

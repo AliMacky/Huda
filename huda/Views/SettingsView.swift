@@ -116,7 +116,7 @@ struct SettingsView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 16))
                     }
                     
-                    Button(action: { settingsManager.selectedMosque = nil }) {
+                    Button(action: { settingsManager.onboardingComplete = false }) {
                         HStack(alignment: .center, spacing: 16) {
                             Spacer()
                             Text("Reset Onboarding")
@@ -128,19 +128,6 @@ struct SettingsView: View {
                     }
                     .background(Color("CardBackground"))
                     .clipShape(RoundedRectangle(cornerRadius: 16))
-                    
-                    Button(action: { NotificationManager.shared.testNotification() }) {
-                        HStack(alignment: .center, spacing: 16) {
-                            Spacer()
-                            Text("Test Notification")
-                                .font(.body)
-                                .foregroundStyle(.red)
-                            Spacer()
-                        }
-                        .padding(16)
-                    }
-                    .background(Color("CardBackground"))
-                    .clipShape(RoundedRectangle(cornerRadius: 16));
                 }
                 .padding(20)
             }

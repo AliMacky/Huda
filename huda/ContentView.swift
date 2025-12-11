@@ -43,7 +43,7 @@ struct ContentView: View {
     @State private var selectedTab: Tab = .home
     
     var body: some View {
-        ZStack {
+        ZStack (alignment: .bottom) {
             Color("AppBackground").ignoresSafeArea()
             
             VStack (spacing: 0) {
@@ -55,15 +55,14 @@ struct ContentView: View {
                                 .background(Color("AppBackground").ignoresSafeArea())
                         }
                     case .times:
-                        Text("Times View")
+                        TimesView()
                     case .qibla:
-                        Text("Qibla View")
+                        QiblaView()
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                
-                TabBar(selected: $selectedTab)
             }
+            TabBar(selected: $selectedTab)
         }
     }
 }
@@ -92,11 +91,12 @@ struct TabBar: View {
             }
         }
         .padding(.vertical, 12)
+        .padding(.horizontal, 24)
         .background(
             RoundedRectangle(cornerRadius: 24)
                 .fill(Color("CardBackground"))
+                .padding(.horizontal, 24)
         )
-        .padding(.horizontal, 24)
     }
 }
 
