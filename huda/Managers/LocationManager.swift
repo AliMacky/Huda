@@ -35,6 +35,12 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     var heading: Double = 0.0
     var headingAccuracy: Double = -1
     
+    private let cacheKeys = (
+        lat: "cachedLocationLatitude",
+        lon: "cachedLocationLongitude",
+        title: "cachedLocationTitle"
+    )
+    
     override private init() {
         super.init()
         manager.delegate = self
@@ -55,18 +61,24 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         self.status = manager.authorizationStatus
         
         if status == .authorizedWhenInUse || status == .authorizedAlways {
-            manager.startUpdatingLocation()
+            if !NetworkMonitor.shared.isConnected {
+                loadCachedLocation()
+            } else {
+                manager.startUpdatingLocation()
+            }
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let latestLocation = locations.last else {return}
+        guard let latestLocation = locations.last else { return }
         self.location = latestLocation.coordinate
+        saveLocationToCache(latestLocation.coordinate)
         
         Task {
             let title = try await latestLocation.fetchCityWithContext()
             await MainActor.run {
                 locationTitle = title
+                saveTitleToCache(title)
             }
         }
         
@@ -93,6 +105,33 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     
     func stopUpdatingHeading() {
         manager.stopUpdatingHeading()
+    }
+    
+    private func saveLocationToCache(_ coordinate: CLLocationCoordinate2D) {
+        UserDefaults.standard.set(coordinate.latitude, forKey: cacheKeys.lat)
+        UserDefaults.standard.set(coordinate.longitude, forKey: cacheKeys.lon)
+    }
+    
+    private func saveTitleToCache(_ title: String) {
+        UserDefaults.standard.set(title, forKey: cacheKeys.title)
+    }
+    
+    private func loadCachedLocation() {
+        let lat = UserDefaults.standard.double(forKey: cacheKeys.lat)
+        let lon = UserDefaults.standard.double(forKey: cacheKeys.lon)
+        let title = UserDefaults.standard.string(forKey: cacheKeys.title)
+        
+        guard lat != 0 || lon != 0 else { return }
+        
+        let cachedCoordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+        self.location = cachedCoordinate
+        
+        if let title = title {
+            self.locationTitle = title
+        }
+        
+        PrayerManager.shared.calculatePrayers(at: cachedCoordinate)
+        PrayerManager.shared.calculateQibla(at: cachedCoordinate)
     }
 }
 

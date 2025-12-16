@@ -31,7 +31,7 @@ struct SettingsView: View {
     
     var body: some View {
         ZStack {
-            Color("AppBackground")
+            Color("Background")
                 .ignoresSafeArea()
             
             ScrollView {
@@ -182,7 +182,7 @@ struct CalculationMethodSettingsView: View {
     
     var body: some View {
         ZStack {
-            Color("AppBackground")
+            Color("Background")
                 .ignoresSafeArea()
             
             ScrollView {
@@ -208,7 +208,7 @@ struct MadhabSettingsView: View {
     
     var body: some View {
         ZStack {
-            Color("AppBackground")
+            Color("Background")
                 .ignoresSafeArea()
             
             ScrollView {

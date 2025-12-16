@@ -25,11 +25,21 @@ import SwiftUI
 @main
 struct hudaApp: App {
     private var settingsManager = SettingsManager.shared
+    private var locationManager = LocationManager.shared
+    private var prayerManager = PrayerManager.shared
+    
+    private var isReady: Bool {
+        locationManager.location != nil && prayerManager.currentPrayerTimes != nil
+    }
     
     var body: some Scene {
         WindowGroup {
             if settingsManager.onboardingComplete {
-                ContentView()
+                if isReady {
+                    ContentView()
+                } else {
+                    LoadingView()
+                }
             } else {
                 OnboardingView()
             }

@@ -35,7 +35,7 @@ struct OnboardingView: View {
     
     var body: some View {
         ZStack {
-            Color("AppBackground")
+            Color("Background")
                 .ignoresSafeArea()
             
             VStack (spacing: 0) {
@@ -290,7 +290,7 @@ struct CalculationMethodPage: View {
             .padding(.horizontal, 32)
             .padding(.top, 20)
             .background(
-                Color("AppBackground")
+                Color("Background")
                     .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: -5)
             )
         }
@@ -569,7 +569,7 @@ struct MosqueSearchView: View {
                 }
             }
         }
-        .background(Color("AppBackground"))
+        .background(Color("Background"))
         .navigationTitle("Find Mosque")
         .navigationBarTitleDisplayMode(.inline)
         .task {

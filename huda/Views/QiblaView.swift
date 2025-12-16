@@ -165,7 +165,7 @@ struct CalibrationTutorialSheet: View {
         }
         .padding(.top, 32)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color("AppBackground"))
+        .background(Color("Background"))
     }
 }
 

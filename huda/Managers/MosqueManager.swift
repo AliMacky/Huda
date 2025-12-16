@@ -57,7 +57,6 @@ class MosqueManager {
         
         if hasToday {
             self.prayerTimes = decoded
-            print("Loaded from cache")
             return true
         } else {
             return false

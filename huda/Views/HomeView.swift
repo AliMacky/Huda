@@ -121,7 +121,7 @@ struct HomeView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                Header(locationTitle: locationManager.locationTitle)
+                Header(locationTitle: locationManager.locationTitle, isConnected: NetworkMonitor.shared.isConnected)
                 NextPrayerCard(state: prayerState)
                 PrayersCard(prayers: prayers)
                 if let details = settingsManager.selectedMosque {
@@ -166,13 +166,32 @@ struct HomeView: View {
 
 struct Header: View {
     let locationTitle: String?
+    let isConnected: Bool
     
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text(locationTitle ?? "Unknown")
-                    .font(.subheadline)
-                    .foregroundStyle(Color("SecondaryText"))
+                HStack(spacing: 8) {
+                    Text(locationTitle ?? "Unknown")
+                        .font(.subheadline)
+                        .foregroundStyle(Color("SecondaryText"))
+                    if !isConnected {
+                        HStack(spacing: 4) {
+                            Image(systemName: "wifi.slash")
+                                .font(.system(size: 10, weight: .semibold))
+                            Text("Offline")
+                                .font(.caption2)
+                                .fontWeight(.semibold)
+                        }
+                        .foregroundStyle(Color("AccentOrange"))
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(
+                            Capsule()
+                                .fill(Color("AccentOrange").opacity(0.15))
+                        )
+                    }
+                }
                 Text(
                     Date(),
                     format: .dateTime.weekday(.wide).month(.abbreviated).day()

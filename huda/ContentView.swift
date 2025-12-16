@@ -44,7 +44,7 @@ struct ContentView: View {
     
     var body: some View {
         ZStack (alignment: .bottom) {
-            Color("AppBackground").ignoresSafeArea()
+            Color("Background").ignoresSafeArea()
             
             VStack (spacing: 0) {
                 Group {
@@ -52,7 +52,7 @@ struct ContentView: View {
                     case .home:
                         NavigationStack {
                             HomeView()
-                                .background(Color("AppBackground").ignoresSafeArea())
+                                .background(Color("Background").ignoresSafeArea())
                         }
                     case .times:
                         TimesView()
@@ -94,7 +94,7 @@ struct TabBar: View {
         .padding(.horizontal, 24)
         .background(
             RoundedRectangle(cornerRadius: 24)
-                .fill(Color("CardBackground"))
+                .fill(.ultraThinMaterial)
                 .padding(.horizontal, 24)
         )
     }
