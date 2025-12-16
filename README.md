@@ -21,8 +21,7 @@ git clone [https://github.com/AliMacky/Huda.git](https://github.com/AliMacky Hud
  ```text 
  // Secrets.xcconfig 
  // Note: Do not include "https://" in the Base URL to avoid xcconfig comment issues.
-API_KEY = your_api_key_here
-MASJIDI_API_BASE_URL = https://api.masjidiapp.com/dev-v2
+MASJIDAL_API_BASE_URL = 
 ``` 
 3. **Open Project:** Open `Huda.xcodeproj` in Xcode. 
 4. **Build & Run:** Select your target simulator (e.g., iPhone 15 Pro) and press `Cmd + R`. 

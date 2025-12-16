@@ -22,20 +22,10 @@
 import Foundation
 
 struct Secrets {
-    static var masjidiApiKey: String {
+    static var masjidalApiBaseUrl: String {
         guard let path = Bundle.main.path(forResource: "Info", ofType: "plist"),
               let dict = NSDictionary(contentsOfFile: path) as? [String: Any],
-              let key = dict["Masjidi Api Key"] as? String else {
-            
-            fatalError("API Key not found in Info.plist")
-        }
-        return key
-    }
-    
-    static var masjidiApiBaseUrl: String {
-        guard let path = Bundle.main.path(forResource: "Info", ofType: "plist"),
-              let dict = NSDictionary(contentsOfFile: path) as? [String: Any],
-              let key = dict["Masjidi Api Base Url"] as? String else {
+              let key = dict["Masjidal Api Base Url"] as? String else {
             
             fatalError("API Key not found in Info.plist")
         }

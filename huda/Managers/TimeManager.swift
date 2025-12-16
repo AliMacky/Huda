@@ -2,7 +2,7 @@
  * Huda – Islamic iOS app for prayer times and Qibla direction
  * Copyright (C) 2025  Ali Macky
  *
- * hudaApp.swift
+ * TimeManager.swift
  * This file is part of Huda.
  *
  * Huda is free software: you can redistribute it and/or modify
@@ -19,30 +19,40 @@
  * along with Huda. If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 import SwiftUI
 
-@main
-struct hudaApp: App {
-    private var settingsManager = SettingsManager.shared
-    private var locationManager = LocationManager.shared
-    private var prayerManager = PrayerManager.shared
+@Observable
+class TimeManager {
+    static let shared = TimeManager()
     
-    private var isReady: Bool {
-        locationManager.location != nil && prayerManager.currentPrayerTimes != nil
+    var now = Date()
+    
+    private var timer: Timer?
+    
+    init() {
+        startTimer()
     }
     
-    var body: some Scene {
-        WindowGroup {
-            if settingsManager.onboardingComplete {
-                if isReady {
-                    ContentView()
-                } else {
-                    LoadingView()
-                }
-            } else {
-                OnboardingView()
+    func startTimer() {
+        timer?.invalidate()
+        
+        let cal = Calendar.current
+        let date = Date()
+        
+        let seconds = cal.component(.second, from: date)
+        let secondsUntilNextMinute = 60 - seconds
+        
+        timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(secondsUntilNextMinute), repeats: false) { [weak self] _ in
+            
+            self?.now = Date()
+            
+            self?.timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
+                self?.now = Date()
             }
         }
+    }
+    
+    deinit {
+        timer?.invalidate()
     }
 }

@@ -21,57 +21,59 @@
 
 import Foundation
 import Adhan
+import Observation
 
 @Observable
 class SettingsManager {
     static let shared = SettingsManager()
     
-    var selectedMethod: CalculationMethod {
-        get {
-            if let raw = UserDefaults.standard.string(forKey: "calc_method"),
-               let method = CalculationMethod(rawValue: raw) {
-                return method
-            }
-            
-            // Default Value
-            return .northAmerica
-        }
-        set {
-            UserDefaults.standard.set(newValue.rawValue, forKey: "calc_method")
+    var onboardingComplete: Bool = UserDefaults.standard.bool(forKey: "onboarded") {
+        didSet {
+            UserDefaults.standard.set(onboardingComplete, forKey: "onboarded")
         }
     }
     
-    var selectedAsrMadhab: MadhabPreference {
-        get {
-            if let raw = UserDefaults.standard.string(forKey: "madhab_pref"),
-               let method = MadhabPreference(rawValue: raw) {
-                return method
-            }
-            
-            // Default Value
-            return .shafi
+    var selectedMethod: CalculationPreference = {
+        if let raw = UserDefaults.standard.string(forKey: "calc_method"),
+           let method = CalculationPreference(rawValue: raw) {
+            return method
         }
-        set {
-            UserDefaults.standard.set(newValue.rawValue, forKey: "madhab_pref")
+        return .na
+    }() {
+        didSet {
+            UserDefaults.standard.set(selectedMethod.rawValue, forKey: "calc_method")
         }
     }
     
-    var selectedMosque: MosqueSearchResults? {
-            get {
-                guard let data = UserDefaults.standard.data(forKey: "user_mosque") else { return nil }
-                if let decoded = try? JSONDecoder().decode(MosqueSearchResults.self, from: data) {
-                    return decoded
+    var selectedAsrMadhab: MadhabPreference = {
+        if let raw = UserDefaults.standard.string(forKey: "madhab_pref"),
+           let method = MadhabPreference(rawValue: raw) {
+            return method
+        }
+        return .shafi
+    }() {
+        didSet {
+            UserDefaults.standard.set(selectedAsrMadhab.rawValue, forKey: "madhab_pref")
+        }
+    }
+    
+    var selectedMosque: MosqueData? = {
+        guard let data = UserDefaults.standard.data(forKey: "user_mosque") else { return nil }
+        if let decoded = try? JSONDecoder().decode(MosqueData.self, from: data) {
+            return decoded
+        }
+        return nil
+    }() {
+        didSet {
+            if let newValue = selectedMosque {
+                if let encoded = try? JSONEncoder().encode(newValue) {
+                    UserDefaults.standard.set(encoded, forKey: "user_mosque")
                 }
-                return nil
-            }
-            set {
-                if let newValue = newValue {
-                    if let encoded = try? JSONEncoder().encode(newValue) {
-                        UserDefaults.standard.set(encoded, forKey: "user_mosque")
-                    }
-                } else {
-                    UserDefaults.standard.removeObject(forKey: "user_mosque")
-                }
+            } else {
+                UserDefaults.standard.removeObject(forKey: "user_mosque")
             }
         }
+    }
+    
+    private init() {}
 }

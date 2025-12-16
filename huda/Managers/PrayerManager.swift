@@ -35,7 +35,7 @@ class PrayerManager {
     private init() {}
     
     func calculatePrayers(at location: CLLocationCoordinate2D) {
-        var params = settingsManager.selectedMethod.params
+        var params = settingsManager.selectedMethod.packageValue.params
         params.madhab = settingsManager.selectedAsrMadhab.packageValue
         
         let cal = Calendar(identifier: Calendar.Identifier.gregorian)
@@ -53,7 +53,7 @@ class PrayerManager {
         self.qiblaDirection = qibla.direction
     }
     
-    func updateCalculationMethod(to calculationMethod: CalculationMethod) {
+    func updateCalculationMethod(to calculationMethod: CalculationPreference) {
         settingsManager.selectedMethod = calculationMethod
         if let location = locationManager.location {
             calculatePrayers(at: location)
@@ -64,6 +64,19 @@ class PrayerManager {
         settingsManager.selectedAsrMadhab = madhab
         if let location = locationManager.location {
             calculatePrayers(at: location)
+        }
+    }
+}
+
+extension Prayer {
+    var localizedName: String {
+        switch self {
+        case .fajr: return "Fajr"
+        case .sunrise: return "Sunrise"
+        case .dhuhr: return "Dhuhr"
+        case .asr: return "Asr"
+        case .maghrib: return "Maghrib"
+        case .isha: return "Isha"
         }
     }
 }

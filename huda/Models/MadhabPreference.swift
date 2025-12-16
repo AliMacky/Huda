@@ -34,7 +34,7 @@ enum MadhabPreference: String, CaseIterable, Identifiable {
         case .hanafi: return "Hanafi"
         }
     }
-
+    
     var packageValue: Madhab {
         switch self {
         case .shafi: return .shafi
