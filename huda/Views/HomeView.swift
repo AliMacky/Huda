@@ -242,7 +242,7 @@ struct NextPrayerCard: View {
                     .foregroundStyle(Color("SecondaryText"))
                     .tracking(1.2)
                 
-                Text(state?.name ?? "Calculating")
+                Text(state?.name.capitalized ?? "Calculating")
                     .font(.title3)
                     .fontWeight(.bold)
                     .foregroundStyle(Color("PrimaryText"))

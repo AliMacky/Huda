@@ -25,6 +25,7 @@ import _LocationEssentials
 
 struct SettingsView: View {
     @State private var settingsManager = SettingsManager.shared
+    @State private var notificationManager = NotificationManager.shared
     @Environment(\.dismiss) var dismiss
     
     @State private var showingMosqueSearch = false
@@ -116,20 +117,13 @@ struct SettingsView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 16))
                     }
                     
-                    Button(action: { settingsManager.onboardingComplete = false }) {
-                        HStack(alignment: .center, spacing: 16) {
-                            Spacer()
-                            Text("Reset Onboarding")
-                                .font(.body)
-                                .foregroundStyle(.red)
-                            Spacer()
-                        }
-                        .padding(16)
-                    }
-                    .background(Color("CardBackground"))
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
+#if DEBUG
+                    DebugView(notificationManager: notificationManager, settingsManager: settingsManager)
+#endif
                 }
-                .padding(20)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 100)
+                
             }
         }
         .navigationTitle("Settings")
@@ -226,6 +220,187 @@ struct MadhabSettingsView: View {
             }
         }
         .navigationTitle("Asr Calculation")
+    }
+}
+
+struct DebugView: View {
+    let notificationManager: NotificationManager
+    let settingsManager: SettingsManager
+    
+    @State private var pendingCount = 0
+    
+    private var lastScheduledText: String {
+        if let date = settingsManager.lastNotificationScheduleDate {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .short
+            formatter.timeStyle = .short
+            return formatter.string(from: date)
+        }
+        return "Never"
+    }
+    
+    private var lastRefreshedText: String {
+        if let date = settingsManager.lastBackgroundRefreshDate {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .short
+            formatter.timeStyle = .short
+            return formatter.string(from: date)
+        }
+        return "Never"
+    }
+    
+    private func updatePendingCount() async {
+        pendingCount = await notificationManager.getPendingNotificationCount()
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("DEBUG")
+                .font(.caption)
+                .fontWeight(.semibold)
+                .foregroundStyle(Color("SecondaryText"))
+                .padding(.horizontal, 4)
+            
+            VStack(spacing: 0) {
+                Button(action: {
+                    Task {
+                        await notificationManager.sendTestNotification()
+                    }
+                }) {
+                    HStack(spacing: 16) {
+                        Image(systemName: "bell.badge.fill")
+                            .font(.system(size: 20))
+                            .frame(width: 24)
+                            .foregroundStyle(Color("AccentOrange"))
+                        
+                        Text("Send Test Notification")
+                            .font(.body)
+                            .foregroundStyle(Color("PrimaryText"))
+                        
+                        Spacer()
+                        
+                        Text("3 sec delay")
+                            .font(.caption)
+                            .foregroundStyle(Color("TertiaryText"))
+                    }
+                    .padding(16)
+                }
+                
+                Divider()
+                    .padding(.leading, 56)
+                
+                HStack(spacing: 16) {
+                    Image(systemName: "list.bullet")
+                        .font(.system(size: 20))
+                        .frame(width: 24)
+                        .foregroundStyle(Color("AccentTeal"))
+                    
+                    Text("Pending Notifications")
+                        .font(.body)
+                        .foregroundStyle(Color("PrimaryText"))
+                    
+                    Spacer()
+                    
+                    Text("\(pendingCount)")
+                        .font(.subheadline)
+                        .foregroundStyle(Color("SecondaryText"))
+                }
+                .padding(16)
+                
+                Divider()
+                    .padding(.leading, 56)
+                
+                HStack(spacing: 16) {
+                    Image(systemName: "calendar.badge.clock")
+                        .font(.system(size: 20))
+                        .frame(width: 24)
+                        .foregroundStyle(Color("AccentTeal"))
+                    
+                    Text("Last Scheduled")
+                        .font(.body)
+                        .foregroundStyle(Color("PrimaryText"))
+                    
+                    Spacer()
+                    
+                    Text(lastScheduledText)
+                        .font(.caption)
+                        .foregroundStyle(Color("SecondaryText"))
+                }
+                .padding(16)
+                
+                Divider()
+                    .padding(.leading, 56)
+                
+                HStack(spacing: 16) {
+                    Image(systemName: "arrow.triangle.2.circlepath")
+                        .font(.system(size: 20))
+                        .frame(width: 24)
+                        .foregroundStyle(Color("AccentTeal"))
+                    
+                    Text("Last BG Refresh")
+                        .font(.body)
+                        .foregroundStyle(Color("PrimaryText"))
+                    
+                    Spacer()
+                    
+                    Text(lastRefreshedText)
+                        .font(.caption)
+                        .foregroundStyle(Color("SecondaryText"))
+                }
+                .padding(16)
+                
+                Divider()
+                    .padding(.leading, 56)
+                
+                Button(action: {
+                    Task {
+                        await notificationManager.scheduleAllNotifications()
+                        await updatePendingCount()
+                    }
+                }) {
+                    HStack(spacing: 16) {
+                        Image(systemName: "arrow.clockwise")
+                            .font(.system(size: 20))
+                            .frame(width: 24)
+                            .foregroundStyle(Color("AccentTeal"))
+                        
+                        Text("Reschedule All Notifications")
+                            .font(.body)
+                            .foregroundStyle(Color("PrimaryText"))
+                        
+                        Spacer()
+                    }
+                    .padding(16)
+                }
+                
+                Divider()
+                    .padding(.leading, 56)
+                
+                Button(action: { settingsManager.onboardingComplete = false }) {
+                    HStack(spacing: 16) {
+                        Image(systemName: "arrow.uturn.backward")
+                            .font(.system(size: 20))
+                            .frame(width: 24)
+                            .foregroundStyle(Color("AccentTeal"))
+                        
+                        Text("Reset Onboarding")
+                            .font(.body)
+                            .foregroundStyle(Color(.red))
+                        
+                        Spacer()
+                    }
+                    .padding(16)
+                }
+            }
+            .background(Color("CardBackground"))
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+            
+            Text("Tip: To test background refresh in Xcode, use Debug → Simulate Background Fetch")
+                .font(.caption2)
+                .foregroundStyle(Color("TertiaryText"))
+                .padding(.horizontal, 4)
+        }
+        .task(updatePendingCount)
     }
 }
 

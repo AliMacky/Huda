@@ -67,16 +67,3 @@ class PrayerManager {
         }
     }
 }
-
-extension Prayer {
-    var localizedName: String {
-        switch self {
-        case .fajr: return "Fajr"
-        case .sunrise: return "Sunrise"
-        case .dhuhr: return "Dhuhr"
-        case .asr: return "Asr"
-        case .maghrib: return "Maghrib"
-        case .isha: return "Isha"
-        }
-    }
-}

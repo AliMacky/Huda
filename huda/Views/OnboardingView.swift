@@ -32,6 +32,7 @@ struct OnboardingView: View {
     private var settingsManager = SettingsManager.shared
     private var locationManager = LocationManager.shared
     private var prayerManager = PrayerManager.shared
+    private var notificationManager = NotificationManager.shared
     
     var body: some View {
         ZStack {
@@ -63,6 +64,19 @@ struct OnboardingView: View {
                     )
                     .tag(3)
                     
+                    NotificationPage(
+                        onNext: {
+                            let granted = await notificationManager.requestPermission()
+                            if granted {
+                                settingsManager.notificationsEnabled = true
+                                await notificationManager.scheduleAllNotifications()
+                            }
+                            currentPage = 5
+                        },
+                        currentPage: $currentPage
+                    )
+                    .tag(4)
+                    
                     MosquePage(
                         selectedMosque: $tempSelectedMosque,
                         onComplete: {
@@ -70,7 +84,7 @@ struct OnboardingView: View {
                         },
                         currentPage: $currentPage
                     )
-                    .tag(4)
+                    .tag(5)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .indexViewStyle(.page(backgroundDisplayMode: .never))
@@ -351,6 +365,82 @@ struct MadhabPage: View {
                     Text("Back")
                         .font(.subheadline)
                         .foregroundStyle(Color("SecondaryText"))
+                }
+            }
+            .padding(.horizontal, 32)
+            .padding(.bottom, 60)
+        }
+    }
+}
+
+struct NotificationPage: View {
+    let onNext: () async -> Void
+    @Binding var currentPage: Int
+    
+    var body: some View {
+        VStack(spacing: 40) {
+            Spacer()
+            
+            VStack(spacing: 32) {
+                ZStack {
+                    Circle()
+                        .fill(Color("AccentTeal").opacity(0.15))
+                        .frame(width: 120, height: 120)
+                    
+                    Image(systemName: "bell.badge.fill")
+                        .font(.system(size: 80))
+                        .foregroundStyle(Color("AccentTeal"))
+                }
+                
+                VStack(spacing: 16) {
+                    Text("Prayer Reminders")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundStyle(Color("PrimaryText"))
+                    
+                    VStack(spacing: 12) {
+                        InfoRow(
+                            icon: "bell.fill",
+                            text: "Get notified when it's time to pray"
+                        )
+                        
+                        InfoRow(
+                            icon: "clock.fill",
+                            text: "Never miss a prayer time"
+                        )
+                        
+                        InfoRow(
+                            icon: "moon.stars.fill",
+                            text: "Notifications work even when app is closed"
+                        )
+                    }
+                    .padding(.horizontal, 32)
+                }
+            }
+            
+            Spacer()
+            
+            VStack(spacing: 12) {
+                Button(action: {
+                    Task {
+                        await onNext()
+                    }
+                }) {
+                    Text("Enable Notifications")
+                        .font(.headline)
+                        .foregroundStyle(Color("PrimaryText"))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 16)
+                        .background(
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(Color("AccentTeal"))
+                        )
+                }
+                
+                Button(action: { currentPage -= 1 }) {
+                    Text("Back")
+                        .font(.subheadline)
+                        .foregroundStyle(Color("TertiaryText"))
                 }
             }
             .padding(.horizontal, 32)

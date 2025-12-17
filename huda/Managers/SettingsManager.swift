@@ -74,6 +74,36 @@ class SettingsManager {
             }
         }
     }
+        
+    var notificationsEnabled: Bool = UserDefaults.standard.bool(forKey: "notifications_enabled") {
+        didSet {
+            UserDefaults.standard.set(notificationsEnabled, forKey: "notifications_enabled")
+        }
+    }
+    
+    var enabledPrayers: Set<Prayer> = {
+        if let raw = UserDefaults.standard.array(forKey: "enabled_prayers") as? [String] {
+            return Set(raw.compactMap { Prayer.from(localizedName: $0) })
+        }
+        return [.fajr, .dhuhr, .asr, .maghrib, .isha]
+    }() {
+        didSet {
+            let raw = enabledPrayers.map { $0.localizedName }
+            UserDefaults.standard.set(raw, forKey: "enabled_prayers")
+        }
+    }
+    
+    var lastNotificationScheduleDate: Date? = UserDefaults.standard.object(forKey: "last_notification_schedule") as? Date {
+        didSet {
+            UserDefaults.standard.set(lastNotificationScheduleDate, forKey: "last_notification_schedule")
+        }
+    }
+    
+    var lastBackgroundRefreshDate: Date? = UserDefaults.standard.object(forKey: "last_background_refresh") as? Date {
+        didSet {
+            UserDefaults.standard.set(lastBackgroundRefreshDate, forKey: "last_background_refresh")
+        }
+    }
     
     private init() {}
 }

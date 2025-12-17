@@ -41,3 +41,28 @@ func arabicName(for prayer: Adhan.Prayer) -> String {
     case .isha: return "العشاء"
     }
 }
+
+extension Prayer {
+    var localizedName: String {
+        switch self {
+        case .fajr: return "fajr"
+        case .sunrise: return "sunrise"
+        case .dhuhr: return "dhuhr"
+        case .asr: return "asr"
+        case .maghrib: return "maghrib"
+        case .isha: return "isha"
+        }
+    }
+    
+    static func from(localizedName: String) -> Prayer? {
+        switch localizedName {
+        case "fajr": return .fajr
+        case "sunrise": return .sunrise
+        case "dhuhr": return .dhuhr
+        case "asr": return .asr
+        case "maghrib": return .maghrib
+        case "isha": return .isha
+        default: return nil
+        }
+    }
+}
