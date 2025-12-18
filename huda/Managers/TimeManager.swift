@@ -21,37 +21,44 @@
 
 import SwiftUI
 
+/// Manages a global timer to keep the UI in sync with the current minute
 @Observable
 class TimeManager {
     static let shared = TimeManager()
-    
+
     var now = Date()
-    
+
     private var timer: Timer?
-    
+
     init() {
         startTimer()
     }
-    
+
     func startTimer() {
         timer?.invalidate()
-        
+
         let cal = Calendar.current
         let date = Date()
-        
+
         let seconds = cal.component(.second, from: date)
         let secondsUntilNextMinute = 60 - seconds
-        
-        timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(secondsUntilNextMinute), repeats: false) { [weak self] _ in
-            
+
+        timer = Timer.scheduledTimer(
+            withTimeInterval: TimeInterval(secondsUntilNextMinute),
+            repeats: false
+        ) { [weak self] _ in
+
             self?.now = Date()
-            
-            self?.timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
+
+            self?.timer = Timer.scheduledTimer(
+                withTimeInterval: 60,
+                repeats: true
+            ) { [weak self] _ in
                 self?.now = Date()
             }
         }
     }
-    
+
     deinit {
         timer?.invalidate()
     }

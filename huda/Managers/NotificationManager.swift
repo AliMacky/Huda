@@ -61,6 +61,7 @@ class NotificationManager {
         }
     }
     
+    /// Schedules prayer notifications for the next 12 days
     func scheduleAllNotifications() async {
         guard settingsManager.notificationsEnabled else {
             await cancelAllNotifications()
@@ -105,20 +106,30 @@ class NotificationManager {
         ]
         
         for (prayer, time) in prayers {
-            guard settingsManager.enabledPrayers.contains(prayer) else { continue }
+            let mode = settingsManager.notificationMode(for: prayer)
             
+            guard mode != .off else { continue }
             guard time > Date() else { continue }
             
-            await schedulePrayerNotification(prayer: prayer, time: time)
+            await schedulePrayerNotification(prayer: prayer, time: time, mode: mode)
         }
     }
     
-    private func schedulePrayerNotification(prayer: Prayer, time: Date) async {
+    private func schedulePrayerNotification(prayer: Prayer, time: Date, mode: PrayerNotificationMode) async {
         let content = UNMutableNotificationContent()
         content.title = "Prayer Time"
         content.body = "It's time for \(prayer.localizedName) prayer"
-        content.sound = .default
         content.interruptionLevel = .timeSensitive
+        
+        switch mode {
+        case .off:
+            return
+        case .silent:
+            content.sound = nil
+        case .athan:
+            let soundFile = settingsManager.selectedAthanSound.fileName
+            content.sound = UNNotificationSound(named: UNNotificationSoundName(soundFile))
+        }
         
         let calendar = Calendar.current
         let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: time)
@@ -131,7 +142,7 @@ class NotificationManager {
         do {
             try await notificationCenter.add(request)
         } catch {
-            print("error: \(error)")
+            print("Notification Error: \(error)")
         }
     }
     
@@ -153,15 +164,15 @@ class NotificationManager {
         let content = UNMutableNotificationContent()
         content.title = "Test Notification"
         content.body = "Notifications are working"
-        content.sound = .default
+        content.sound = UNNotificationSound(named: UNNotificationSoundName("takber-alkatamy.caf"))
         
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 3, repeats: false)
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
         let request = UNNotificationRequest(identifier: "huda_test", content: content, trigger: trigger)
         
         do {
             try await notificationCenter.add(request)
         } catch {
-            print("error: \(error)")
+            print("Notification Error: \(error)")
         }
     }
     

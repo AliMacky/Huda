@@ -11,7 +11,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		41FB85752EDD2E4900F31323 /* huda.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = huda.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		41FB85752EDD2E4900F31323 /* Huda.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Huda.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -45,7 +45,7 @@
 		41FB85762EDD2E4900F31323 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				41FB85752EDD2E4900F31323 /* huda.app */,
+				41FB85752EDD2E4900F31323 /* Huda.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -53,9 +53,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		41FB85742EDD2E4900F31323 /* huda */ = {
+		41FB85742EDD2E4900F31323 /* Huda */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 41FB85802EDD2E4A00F31323 /* Build configuration list for PBXNativeTarget "huda" */;
+			buildConfigurationList = 41FB85802EDD2E4A00F31323 /* Build configuration list for PBXNativeTarget "Huda" */;
 			buildPhases = (
 				41FB85712EDD2E4900F31323 /* Sources */,
 				41FB85722EDD2E4900F31323 /* Frameworks */,
@@ -68,12 +68,12 @@
 			fileSystemSynchronizedGroups = (
 				41FB85772EDD2E4900F31323 /* huda */,
 			);
-			name = huda;
+			name = Huda;
 			packageProductDependencies = (
 				41FB85842EDD302D00F31323 /* Adhan */,
 			);
 			productName = huda_new;
-			productReference = 41FB85752EDD2E4900F31323 /* huda.app */;
+			productReference = 41FB85752EDD2E4900F31323 /* Huda.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -108,7 +108,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				41FB85742EDD2E4900F31323 /* huda */,
+				41FB85742EDD2E4900F31323 /* Huda */,
 			);
 		};
 /* End PBXProject section */
@@ -343,7 +343,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		41FB85802EDD2E4A00F31323 /* Build configuration list for PBXNativeTarget "huda" */ = {
+		41FB85802EDD2E4A00F31323 /* Build configuration list for PBXNativeTarget "Huda" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				41FB85812EDD2E4A00F31323 /* Debug */,

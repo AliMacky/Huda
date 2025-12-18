@@ -19,17 +19,16 @@
  * along with Huda. If not, see <https://www.gnu.org/licenses/>.
  */
 
-
-import SwiftUI
 import Adhan
+import SwiftUI
 
 enum Tab: String, CaseIterable, Identifiable {
     case home = "house.fill"
     case times = "clock.fill"
     case qibla = "location.fill"
-    
+
     var id: String { rawValue }
-    
+
     var title: String {
         switch self {
         case .home: return "Home"
@@ -41,18 +40,20 @@ enum Tab: String, CaseIterable, Identifiable {
 
 struct ContentView: View {
     @State private var selectedTab: Tab = .home
-    
+
     var body: some View {
-        ZStack (alignment: .bottom) {
+        ZStack(alignment: .bottom) {
             Color("Background").ignoresSafeArea()
-            
-            VStack (spacing: 0) {
+
+            VStack(spacing: 0) {
                 Group {
                     switch selectedTab {
                     case .home:
                         NavigationStack {
                             HomeView()
-                                .background(Color("Background").ignoresSafeArea())
+                                .background(
+                                    Color("Background").ignoresSafeArea()
+                                )
                         }
                     case .times:
                         TimesView()
@@ -69,7 +70,7 @@ struct ContentView: View {
 
 struct TabBar: View {
     @Binding var selected: Tab
-    
+
     var body: some View {
         HStack(spacing: 0) {
             ForEach(Tab.allCases) { tab in
@@ -81,12 +82,15 @@ struct TabBar: View {
                     VStack(spacing: 4) {
                         Image(systemName: tab.rawValue)
                             .font(.system(size: 20))
-                        
+
                         Text(tab.title)
                             .font(.caption2)
                     }
                     .frame(maxWidth: .infinity)
-                    .foregroundStyle(selected == tab ? Color("AccentTeal") : Color("SecondaryText"))
+                    .foregroundStyle(
+                        selected == tab
+                            ? Color("AccentTeal") : Color("SecondaryText")
+                    )
                 }
             }
         }

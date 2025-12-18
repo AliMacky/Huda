@@ -19,91 +19,123 @@
  * along with Huda. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Foundation
 import Adhan
+import Foundation
 import Observation
 
 @Observable
 class SettingsManager {
     static let shared = SettingsManager()
-    
-    var onboardingComplete: Bool = UserDefaults.standard.bool(forKey: "onboarded") {
+
+    var settings: SettingsModel {
         didSet {
-            UserDefaults.standard.set(onboardingComplete, forKey: "onboarded")
+            save()
         }
     }
-    
-    var selectedMethod: CalculationPreference = {
-        if let raw = UserDefaults.standard.string(forKey: "calc_method"),
-           let method = CalculationPreference(rawValue: raw) {
-            return method
-        }
-        return .na
-    }() {
-        didSet {
-            UserDefaults.standard.set(selectedMethod.rawValue, forKey: "calc_method")
-        }
+
+    private init() {
+        self.settings = SettingsManager.load()
     }
-    
-    var selectedAsrMadhab: MadhabPreference = {
-        if let raw = UserDefaults.standard.string(forKey: "madhab_pref"),
-           let method = MadhabPreference(rawValue: raw) {
-            return method
-        }
-        return .shafi
-    }() {
-        didSet {
-            UserDefaults.standard.set(selectedAsrMadhab.rawValue, forKey: "madhab_pref")
-        }
+
+    var onboardingComplete: Bool {
+        get { settings.onboardingComplete }
+        set { settings.onboardingComplete = newValue }
     }
-    
-    var selectedMosque: MosqueData? = {
-        guard let data = UserDefaults.standard.data(forKey: "user_mosque") else { return nil }
-        if let decoded = try? JSONDecoder().decode(MosqueData.self, from: data) {
-            return decoded
-        }
-        return nil
-    }() {
-        didSet {
-            if let newValue = selectedMosque {
-                if let encoded = try? JSONEncoder().encode(newValue) {
-                    UserDefaults.standard.set(encoded, forKey: "user_mosque")
-                }
-            } else {
-                UserDefaults.standard.removeObject(forKey: "user_mosque")
+
+    var selectedMethod: CalculationPreference {
+        get { settings.calculationMethod }
+        set {
+            settings.calculationMethod = newValue
+            Task {
+                await NotificationManager.shared.scheduleAllNotifications()
             }
         }
     }
-        
-    var notificationsEnabled: Bool = UserDefaults.standard.bool(forKey: "notifications_enabled") {
-        didSet {
-            UserDefaults.standard.set(notificationsEnabled, forKey: "notifications_enabled")
+
+    var selectedAsrMadhab: MadhabPreference {
+        get { settings.asrMadhab }
+        set {
+            settings.asrMadhab = newValue
+            Task {
+                await NotificationManager.shared.scheduleAllNotifications()
+            }
         }
     }
-    
-    var enabledPrayers: Set<Prayer> = {
-        if let raw = UserDefaults.standard.array(forKey: "enabled_prayers") as? [String] {
-            return Set(raw.compactMap { Prayer.from(localizedName: $0) })
-        }
-        return [.fajr, .dhuhr, .asr, .maghrib, .isha]
-    }() {
-        didSet {
-            let raw = enabledPrayers.map { $0.localizedName }
-            UserDefaults.standard.set(raw, forKey: "enabled_prayers")
+
+    var selectedMosque: MosqueData? {
+        get { settings.selectedMosque }
+        set { settings.selectedMosque = newValue }
+    }
+
+    var notificationsEnabled: Bool {
+        get { settings.notificationsEnabled }
+        set {
+            settings.notificationsEnabled = newValue
+            Task {
+                await NotificationManager.shared.scheduleAllNotifications()
+            }
         }
     }
-    
-    var lastNotificationScheduleDate: Date? = UserDefaults.standard.object(forKey: "last_notification_schedule") as? Date {
-        didSet {
-            UserDefaults.standard.set(lastNotificationScheduleDate, forKey: "last_notification_schedule")
+
+    var prayerNotificationModes: [String: PrayerNotificationMode] {
+        get { settings.prayerNotificationModes }
+        set {
+            settings.prayerNotificationModes = newValue
+            Task {
+                await NotificationManager.shared.scheduleAllNotifications()
+            }
         }
     }
-    
-    var lastBackgroundRefreshDate: Date? = UserDefaults.standard.object(forKey: "last_background_refresh") as? Date {
-        didSet {
-            UserDefaults.standard.set(lastBackgroundRefreshDate, forKey: "last_background_refresh")
+
+    var selectedAthanSound: AthanSound {
+        get { settings.selectedAthanSound }
+        set {
+            settings.selectedAthanSound = newValue
+            Task {
+                await NotificationManager.shared.scheduleAllNotifications()
+            }
         }
     }
-    
-    private init() {}
+
+    var lastNotificationScheduleDate: Date? {
+        get { settings.lastNotificationScheduleDate }
+        set { settings.lastNotificationScheduleDate = newValue }
+    }
+
+    var lastBackgroundRefreshDate: Date? {
+        get { settings.lastBackgroundRefreshDate }
+        set { settings.lastBackgroundRefreshDate = newValue }
+    }
+
+    func notificationMode(for prayer: Prayer) -> PrayerNotificationMode {
+        let key = prayer.localizedName
+        return settings.prayerNotificationModes[key] ?? .athan
+    }
+
+    func setNotificationMode(_ mode: PrayerNotificationMode, for prayer: Prayer)
+    {
+        let key = prayer.localizedName
+        settings.prayerNotificationModes[key] = mode
+        Task {
+            await NotificationManager.shared.scheduleAllNotifications()
+        }
+    }
+
+    private func save() {
+        if let encoded = try? JSONEncoder().encode(settings) {
+            UserDefaults.standard.set(encoded, forKey: "app_settings")
+        }
+    }
+
+    private static func load() -> SettingsModel {
+        if let data = UserDefaults.standard.data(forKey: "app_settings"),
+            let decoded = try? JSONDecoder().decode(
+                SettingsModel.self,
+                from: data
+            )
+        {
+            return decoded
+        }
+        return SettingsModel()
+    }
 }

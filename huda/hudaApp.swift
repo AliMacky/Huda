@@ -19,9 +19,8 @@
  * along with Huda. If not, see <https://www.gnu.org/licenses/>.
  */
 
-
-import SwiftUI
 import BackgroundTasks
+import SwiftUI
 
 @main
 struct hudaApp: App {
@@ -29,17 +28,19 @@ struct hudaApp: App {
     private var locationManager = LocationManager.shared
     private var prayerManager = PrayerManager.shared
     private var notificationManager = NotificationManager.shared
-    
-    private let backgroundTaskIdentifier = "com.alimacky.huda.refreshNotifications"
-    
+
+    private let backgroundTaskIdentifier =
+        "com.alimacky.huda.refreshNotifications"
+
     private var isReady: Bool {
-        locationManager.location != nil && prayerManager.currentPrayerTimes != nil
+        locationManager.location != nil
+            && prayerManager.currentPrayerTimes != nil
     }
-    
+
     init() {
         registerBackgroundTask()
     }
-    
+
     var body: some Scene {
         WindowGroup {
             if settingsManager.onboardingComplete {
@@ -55,16 +56,18 @@ struct hudaApp: App {
         .onChange(of: scenePhase) { oldPhase, newPhase in
             if newPhase == .background {
                 scheduleBackgroundTask()
-            } else if newPhase == .active && settingsManager.notificationsEnabled {
+            } else if newPhase == .active
+                && settingsManager.notificationsEnabled
+            {
                 Task {
                     await notificationManager.scheduleAllNotifications()
                 }
             }
         }
     }
-    
+
     @Environment(\.scenePhase) private var scenePhase
-    
+
     private func registerBackgroundTask() {
         BGTaskScheduler.shared.register(
             forTaskWithIdentifier: backgroundTaskIdentifier,
@@ -73,29 +76,31 @@ struct hudaApp: App {
             self.handleAppRefresh(task: task as! BGAppRefreshTask)
         }
     }
-    
+
     private func scheduleBackgroundTask() {
-        let request = BGAppRefreshTaskRequest(identifier: backgroundTaskIdentifier)
+        let request = BGAppRefreshTaskRequest(
+            identifier: backgroundTaskIdentifier
+        )
         request.earliestBeginDate = Date(timeIntervalSinceNow: 12 * 60 * 60)
-        
+
         do {
             try BGTaskScheduler.shared.submit(request)
         } catch {
-            print("error: \(error)")
+            print("BGTask Error: \(error)")
         }
     }
-    
+
     private func handleAppRefresh(task: BGAppRefreshTask) {
         scheduleBackgroundTask()
-        
+
         let refreshTask = Task {
             await notificationManager.refreshNotificationQueue()
         }
-        
+
         task.expirationHandler = {
             refreshTask.cancel()
         }
-        
+
         Task {
             await refreshTask.value
             settingsManager.lastBackgroundRefreshDate = Date()

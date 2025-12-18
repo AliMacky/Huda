@@ -19,8 +19,8 @@
  * along with Huda. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Foundation
 import Adhan
+import Foundation
 
 struct PrayerItem: Identifiable {
     let id = UUID()
@@ -43,6 +43,8 @@ func arabicName(for prayer: Adhan.Prayer) -> String {
 }
 
 extension Prayer {
+
+    /// Represents the enum as a display string
     var localizedName: String {
         switch self {
         case .fajr: return "fajr"
@@ -53,7 +55,8 @@ extension Prayer {
         case .isha: return "isha"
         }
     }
-    
+
+    /// Gets the enum from a display string
     static func from(localizedName: String) -> Prayer? {
         switch localizedName {
         case "fajr": return .fajr
