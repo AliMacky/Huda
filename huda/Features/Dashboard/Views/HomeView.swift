@@ -39,7 +39,7 @@ struct HomeView: View {
             let formatter = DateFormatter()
             formatter.dateFormat = "h:mm a"
             formatter.timeZone = locationManager.effectiveTimezone
-            
+
             return prayersToShow.map { prayer in
                 let prayerTime = times.time(for: prayer)
 

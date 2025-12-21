@@ -35,7 +35,22 @@ class PrayerManager {
     private init() {}
 
     func calculatePrayers(at location: CLLocationCoordinate2D) {
-        var params = settingsManager.selectedMethod.packageValue.params
+        var params: CalculationParameters
+
+        if settingsManager.useAdvancedCalculation {
+            params = CalculationMethod.other.params
+            let custom = settingsManager.customCalculationParameters
+            params.fajrAngle = custom.fajrAngle
+            params.ishaAngle = custom.ishaAngle
+            if let interval = custom.ishaInterval {
+                params.ishaInterval = interval
+            }
+            params.highLatitudeRule = custom.highLatitudeRule.packageValue
+            params.adjustments = custom.adjustments.packageValue
+        } else {
+            params = settingsManager.selectedMethod.packageValue.params
+        }
+
         params.madhab = settingsManager.selectedAsrMadhab.packageValue
 
         let cal = Calendar(identifier: Calendar.Identifier.gregorian)

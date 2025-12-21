@@ -42,4 +42,7 @@ struct SettingsModel: Codable, Equatable {
     var manualLocationLongitude: Double? = nil
     var manualLocationTitle: String? = nil
     var manualLocationTimezone: String? = nil
+    var useAdvancedCalculation: Bool = false
+    var customCalculationParameters: CustomCalculationParameters =
+        CustomCalculationParameters()
 }

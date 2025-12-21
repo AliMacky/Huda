@@ -2,7 +2,7 @@
  * Huda – Islamic iOS app for prayer times and Qibla direction
  * Copyright (C) 2025  Ali Macky
  *
- * MadhabPreference.swift
+ * CalculationAdjustmentRow.swift
  * This file is part of Huda.
  *
  * Huda is free software: you can redistribute it and/or modify
@@ -19,34 +19,33 @@
  * along with Huda. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Adhan
-import Foundation
+import SwiftUI
 
-enum MadhabPreference: String, CaseIterable, Identifiable, Codable {
-    case shafi
-    case hanafi
+struct CalculationAdjustmentRow: View {
+    let title: String
+    @Binding var value: Int
 
-    var id: String { self.rawValue }
+    var body: some View {
+        HStack {
+            Text(title)
+                .font(.body)
+                .foregroundStyle(Color("PrimaryText"))
 
-    /// Represents the enum as a display string
-    var displayName: String {
-        switch self {
-        case .shafi: return "Standard"
-        case .hanafi: return "Hanafi"
+            Spacer()
+
+            Text(value >= 0 ? "+\(value)" : "\(value)")
+                .font(.body)
+                .foregroundStyle(Color("SecondaryText"))
+                .frame(width: 50, alignment: .trailing)
+
+            Stepper(
+                "",
+                value: $value,
+                in: -30...30,
+                step: 1
+            )
+            .labelsHidden()
         }
-    }
-
-    var subtitle: String {
-        switch self {
-        case .shafi: return "Shafi, Maliki, Hanbali"
-        case .hanafi: return "Later Asr time"
-        }
-    }
-
-    var packageValue: Madhab {
-        switch self {
-        case .shafi: return .shafi
-        case .hanafi: return .hanafi
-        }
+        .padding(16)
     }
 }

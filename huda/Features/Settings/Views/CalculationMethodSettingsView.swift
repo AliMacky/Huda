@@ -24,6 +24,7 @@ import SwiftUI
 
 struct CalculationMethodSettingsView: View {
     @State private var settingsManager = SettingsManager.shared
+    @State private var showAdvancedSettings = false
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
@@ -33,59 +34,29 @@ struct CalculationMethodSettingsView: View {
 
             ScrollView {
                 VStack(spacing: 24) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        ForEach(CalculationPreference.allCases) { method in
-                            Button(action: {
-                                settingsManager.selectedMethod = method
-                            }) {
-                                HStack {
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text(method.displayName)
-                                            .font(.body)
-                                            .foregroundStyle(
-                                                Color("PrimaryText")
-                                            )
-                                    }
-
-                                    Spacer()
-
-                                    if settingsManager.selectedMethod == method
-                                    {
-                                        Image(systemName: "checkmark")
-                                            .foregroundStyle(Color.accentColor)
-                                            .fontWeight(.semibold)
-                                    }
-                                }
-                                .padding(16)
-                                .background(Color("CardBackground"))
-                                .contentShape(Rectangle())
-                            }
-                            .buttonStyle(.plain)
-
-                            if method != CalculationPreference.allCases.last {
-                                Divider()
-                                    .padding(.leading, 16)
-                            }
-                        }
-                    }
-                    .background(Color("CardBackground"))
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .padding(.horizontal, 20)
-                    .padding(.top, 20)
-
-                    Text(
-                        "The calculation method determines the angles used for Fajr and Isha, and may affect other prayer times depending on the region."
+                    CalculationMethodSelector(
+                        selectedMethod: $settingsManager.selectedMethod,
+                        useAdvancedCalculation: $settingsManager
+                            .useAdvancedCalculation,
+                        customParameters: settingsManager
+                            .customCalculationParameters,
+                        onAdvancedTap: { showAdvancedSettings = true }
                     )
-                    .font(.footnote)
-                    .foregroundStyle(Color("SecondaryText"))
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 40)
+
+                    AsrMadhabSelector(
+                        selectedMadhab: $settingsManager.selectedAsrMadhab
+                    )
                 }
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
                 .padding(.bottom, 100)
             }
         }
-        .navigationTitle("Calculation Method")
+        .navigationTitle("Prayer Calculation")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(isPresented: $showAdvancedSettings) {
+            AdvancedCalculationSettingsView()
+        }
     }
 }
 

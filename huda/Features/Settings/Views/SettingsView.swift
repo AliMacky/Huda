@@ -84,29 +84,16 @@ struct SettingsView: View {
                             .foregroundStyle(Color("SecondaryText"))
                             .padding(.horizontal, 4)
 
-                        VStack(spacing: 0) {
-                            NavigationLink(
-                                destination: CalculationMethodSettingsView()
-                            ) {
-                                SettingsRow(
-                                    icon: "clock.fill",
-                                    title: "Calculation Method",
-                                    value: settingsManager.selectedMethod
-                                        .displayName
-                                )
-                            }
-
-                            Divider()
-                                .padding(.leading, 56)
-
-                            NavigationLink(destination: MadhabSettingsView()) {
-                                SettingsRow(
-                                    icon: "sun.max.fill",
-                                    title: "Asr Calculation",
-                                    value: settingsManager.selectedAsrMadhab
-                                        .displayName
-                                )
-                            }
+                        NavigationLink(
+                            destination: CalculationMethodSettingsView()
+                        ) {
+                            SettingsRow(
+                                icon: "clock.fill",
+                                title: "Prayer Calculation",
+                                value: settingsManager.useAdvancedCalculation
+                                    ? "Custom"
+                                    : settingsManager.selectedMethod.displayName
+                            )
                         }
                         .background(Color("CardBackground"))
                         .clipShape(RoundedRectangle(cornerRadius: 16))
