@@ -35,6 +35,59 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     var heading: Double = 0.0
     var headingAccuracy: Double = -1
 
+    var effectiveLocation: CLLocationCoordinate2D? {
+        let settings = SettingsManager.shared
+        switch settings.locationMode {
+        case .automatic:
+            return location
+        case .manual:
+            if let lat = settings.manualLocationLatitude,
+               let lon = settings.manualLocationLongitude {
+                return CLLocationCoordinate2D(latitude: lat, longitude: lon)
+            }
+            return nil
+        }
+    }
+
+    var effectiveLocationTitle: String? {
+        let settings = SettingsManager.shared
+        switch settings.locationMode {
+        case .automatic:
+            return locationTitle
+        case .manual:
+            return settings.manualLocationTitle
+        }
+    }
+
+    var effectiveTimezone: TimeZone {
+        let settings = SettingsManager.shared
+        switch settings.locationMode {
+        case .automatic:
+            return .current
+        case .manual:
+            if let tzId = settings.manualLocationTimezone,
+               let tz = TimeZone(identifier: tzId) {
+                return tz
+            }
+            return .current
+        }
+    }
+
+    func setManualLocation(
+        latitude: Double,
+        longitude: Double,
+        title: String,
+        timezone: String
+    ) {
+        let settings = SettingsManager.shared
+        settings.manualLocationLatitude = latitude
+        settings.manualLocationLongitude = longitude
+        settings.manualLocationTitle = title
+        settings.manualLocationTimezone = timezone
+        settings.locationMode = .manual
+        recalculateWithCurrentMode()
+    }
+
     private let cacheKeys = (
         lat: "cachedLocationLatitude",
         lon: "cachedLocationLongitude",
@@ -85,8 +138,10 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             }
         }
 
-        PrayerManager.shared.calculatePrayers(at: latestLocation.coordinate)
-        PrayerManager.shared.calculateQibla(at: latestLocation.coordinate)
+        if SettingsManager.shared.locationMode == .automatic {
+            PrayerManager.shared.calculatePrayers(at: latestLocation.coordinate)
+            PrayerManager.shared.calculateQibla(at: latestLocation.coordinate)
+        }
     }
 
     func locationManager(
@@ -114,6 +169,15 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
 
     func stopUpdatingHeading() {
         manager.stopUpdatingHeading()
+    }
+
+    func recalculateWithCurrentMode() {
+        guard let coordinate = effectiveLocation else { return }
+        PrayerManager.shared.calculatePrayers(at: coordinate)
+        PrayerManager.shared.calculateQibla(at: coordinate)
+        Task {
+            await NotificationManager.shared.scheduleAllNotifications()
+        }
     }
 
     private func saveLocationToCache(_ coordinate: CLLocationCoordinate2D) {

@@ -43,6 +43,15 @@ struct SettingsView: View {
         }
     }
 
+    private var locationValueText: String {
+        switch settingsManager.locationMode {
+        case .automatic:
+            return "Automatic"
+        case .manual:
+            return settingsManager.manualLocationTitle ?? "Manual"
+        }
+    }
+
     var body: some View {
         ZStack {
             Color("Background")
@@ -50,6 +59,24 @@ struct SettingsView: View {
 
             ScrollView {
                 VStack(spacing: 24) {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("LOCATION SETTINGS")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(Color("SecondaryText"))
+                            .padding(.horizontal, 4)
+
+                        NavigationLink(destination: LocationSettingsView()) {
+                            SettingsRow(
+                                icon: "location.fill",
+                                title: "Location",
+                                value: locationValueText
+                            )
+                        }
+                        .background(Color("CardBackground"))
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                    }
+
                     VStack(alignment: .leading, spacing: 12) {
                         Text("CALCULATION SETTINGS")
                             .font(.caption)

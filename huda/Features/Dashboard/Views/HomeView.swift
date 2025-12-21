@@ -36,12 +36,16 @@ struct HomeView: View {
         ]
 
         if let times = prayerManager.currentPrayerTimes {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "h:mm a"
+            formatter.timeZone = locationManager.effectiveTimezone
+            
             return prayersToShow.map { prayer in
                 let prayerTime = times.time(for: prayer)
 
                 return PrayerItem(
                     name: prayer.localizedName,
-                    time: prayerTime.formatted(.dateTime.hour().minute()),
+                    time: formatter.string(from: prayerTime),
                     arabicName: arabicName(for: prayer),
                     passed: timeManager.now > prayerTime,
                     icon: iconForPrayer(prayer)
@@ -116,7 +120,7 @@ struct HomeView: View {
         ScrollView {
             VStack(spacing: 20) {
                 Header(
-                    locationTitle: locationManager.locationTitle,
+                    locationTitle: locationManager.effectiveLocationTitle,
                     isConnected: NetworkMonitor.shared.isConnected
                 )
                 NextPrayerCard(state: prayerState)

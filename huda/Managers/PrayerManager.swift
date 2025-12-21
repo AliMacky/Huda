@@ -65,14 +65,14 @@ class PrayerManager {
 
     func updateCalculationMethod(to calculationMethod: CalculationPreference) {
         settingsManager.selectedMethod = calculationMethod
-        if let location = locationManager.location {
+        if let location = locationManager.effectiveLocation {
             calculatePrayers(at: location)
         }
     }
 
     func updateAsrMadhab(to madhab: MadhabPreference) {
         settingsManager.selectedAsrMadhab = madhab
-        if let location = locationManager.location {
+        if let location = locationManager.effectiveLocation {
             calculatePrayers(at: location)
         }
     }

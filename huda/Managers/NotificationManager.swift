@@ -118,7 +118,11 @@ class NotificationManager {
     private func schedulePrayerNotification(prayer: Prayer, time: Date, mode: PrayerNotificationMode) async {
         let content = UNMutableNotificationContent()
         content.title = "Prayer Time"
-        content.body = "It's time for \(prayer.localizedName) prayer"
+        if let location = locationManager.effectiveLocationTitle {
+            content.body = "It's time for \(prayer.localizedName) prayer in \(location)"
+        } else {
+            content.body = "It's time for \(prayer.localizedName) prayer"
+        }
         content.interruptionLevel = .timeSensitive
         
         switch mode {

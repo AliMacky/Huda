@@ -121,6 +121,34 @@ class SettingsManager {
         }
     }
 
+    var locationMode: LocationMode {
+        get { settings.locationMode }
+        set {
+            settings.locationMode = newValue
+            LocationManager.shared.recalculateWithCurrentMode()
+        }
+    }
+
+    var manualLocationLatitude: Double? {
+        get { settings.manualLocationLatitude }
+        set { settings.manualLocationLatitude = newValue }
+    }
+
+    var manualLocationLongitude: Double? {
+        get { settings.manualLocationLongitude }
+        set { settings.manualLocationLongitude = newValue }
+    }
+
+    var manualLocationTitle: String? {
+        get { settings.manualLocationTitle }
+        set { settings.manualLocationTitle = newValue }
+    }
+
+    var manualLocationTimezone: String? {
+        get { settings.manualLocationTimezone }
+        set { settings.manualLocationTimezone = newValue }
+    }
+
     private func save() {
         if let encoded = try? JSONEncoder().encode(settings) {
             UserDefaults.standard.set(encoded, forKey: "app_settings")

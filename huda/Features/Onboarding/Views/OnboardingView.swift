@@ -46,7 +46,6 @@ struct OnboardingView: View {
                         .tag(0)
 
                     LocationPage(onNext: {
-                        locationManager.requestPermission()
                         currentPage = 2
                     })
                     .tag(1)

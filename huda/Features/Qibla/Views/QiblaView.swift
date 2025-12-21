@@ -51,8 +51,8 @@ struct QiblaView: View {
                 )
 
                 LocationCard(
-                    locationTitle: locationManager.locationTitle,
-                    coordinates: locationManager.location
+                    locationTitle: locationManager.effectiveLocationTitle,
+                    coordinates: locationManager.effectiveLocation
                 )
             }
 

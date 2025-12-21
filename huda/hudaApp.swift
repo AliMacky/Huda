@@ -33,12 +33,16 @@ struct hudaApp: App {
         "com.alimacky.huda.refreshNotifications"
 
     private var isReady: Bool {
-        locationManager.location != nil
+        locationManager.effectiveLocation != nil
             && prayerManager.currentPrayerTimes != nil
     }
 
     init() {
         registerBackgroundTask()
+        
+        if settingsManager.locationMode == .manual {
+            locationManager.recalculateWithCurrentMode()
+        }
     }
 
     var body: some Scene {

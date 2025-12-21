@@ -25,6 +25,15 @@ import SwiftUI
 struct NextPrayerCard: View {
     let state: PrayerProgressState?
     var timeManager = TimeManager.shared
+    var locationManager = LocationManager.shared
+
+    private var formattedEndTime: String? {
+        guard let endTime = state?.endTime else { return nil }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm a"
+        formatter.timeZone = locationManager.effectiveTimezone
+        return formatter.string(from: endTime)
+    }
 
     var body: some View {
         HStack(spacing: 20) {
@@ -66,10 +75,8 @@ struct NextPrayerCard: View {
                         .foregroundStyle(Color("AccentTeal"))
                         .lineLimit(1)
 
-                    if let endTime = state?.endTime {
-                        Text(
-                            "• \(endTime.formatted(date: .omitted, time: .shortened))"
-                        )
+                    if let endTimeStr = formattedEndTime {
+                        Text("• \(endTimeStr)")
                         .font(.subheadline)
                         .foregroundStyle(Color("SecondaryText"))
                         .lineLimit(1)

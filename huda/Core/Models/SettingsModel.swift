@@ -37,4 +37,9 @@ struct SettingsModel: Codable, Equatable {
     var selectedAthanSound: AthanSound = .imadi
     var lastNotificationScheduleDate: Date? = nil
     var lastBackgroundRefreshDate: Date? = nil
+    var locationMode: LocationMode = .automatic
+    var manualLocationLatitude: Double? = nil
+    var manualLocationLongitude: Double? = nil
+    var manualLocationTitle: String? = nil
+    var manualLocationTimezone: String? = nil
 }
