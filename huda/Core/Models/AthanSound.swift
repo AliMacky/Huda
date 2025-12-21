@@ -2,7 +2,7 @@
  * Huda – Islamic iOS app for prayer times and Qibla direction
  * Copyright (C) 2025  Ali Macky
  *
- * SecretsManager.swift
+ * AthanSound.swift
  * This file is part of Huda.
  *
  * Huda is free software: you can redistribute it and/or modify
@@ -21,30 +21,26 @@
 
 import Foundation
 
-struct Secrets {
-    static var masjidalApiBaseUrl: String {
-        guard let path = Bundle.main.path(forResource: "Info", ofType: "plist"),
-            let dict = NSDictionary(contentsOfFile: path) as? [String: Any],
-            let key = dict["Masjidal Api Base Url"] as? String
-        else {
+enum AthanSound: String, CaseIterable, Identifiable, Codable {
+    case imadi = "takbeer-ahmed-al-imadi"
+    case hamathani = "takbeer-majed-al-hamathani"
+    case afasy = "takbeer-mishary-rashid-al-afasy"
+    case silmane = "takbeer-mokhtar-hadj-slimane"
+    case qatami = "takbeer-nasser-al-qatami"
 
-            fatalError("API Key not found in Info.plist")
+    var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .imadi: return "Ahmed Al Imadi Takbeer"
+        case .hamathani: return "Majed Al Hamathani"
+        case .afasy: return "Mishary Rashid Al Afasy"
+        case .silmane: return "Mokhtar Hadj Silmane"
+        case .qatami: return "Nasser Al Qatami"
         }
-        return "https://" + key
-    }
-}
-
-struct AppInfo {
-    static var version: String {
-        return Bundle.main.infoDictionary?["CFBundleShortVersionString"]
-            as? String ?? "1.0"
     }
 
-    static var build: String {
-        return Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
-    }
-
-    static var fullVersionString: String {
-        return "v\(version) (\(build))"
+    var fileName: String {
+        return rawValue + ".caf"
     }
 }

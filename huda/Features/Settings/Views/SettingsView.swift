@@ -21,59 +21,104 @@
 
 import Adhan
 import SwiftUI
-import _LocationEssentials
 
 struct SettingsView: View {
     @State private var settingsManager = SettingsManager.shared
+    @State private var notificationManager = NotificationManager.shared
     @Environment(\.dismiss) var dismiss
-    
+
     @State private var showingMosqueSearch = false
-    
+
+    private var notificationSummary: String {
+        let modes = settingsManager.prayerNotificationModes
+        let athanCount = modes.values.filter { $0 == .athan }.count
+        let silentCount = modes.values.filter { $0 == .silent }.count
+
+        if athanCount == 5 {
+            return "All with Athan"
+        } else if athanCount + silentCount == 0 {
+            return "Off"
+        } else {
+            return "\(athanCount) Athan, \(silentCount) Silent"
+        }
+    }
+
+    private var locationValueText: String {
+        switch settingsManager.locationMode {
+        case .automatic:
+            return "Automatic"
+        case .manual:
+            return settingsManager.manualLocationTitle ?? "Manual"
+        }
+    }
+
     var body: some View {
         ZStack {
             Color("Background")
                 .ignoresSafeArea()
-            
+
             ScrollView {
                 VStack(spacing: 24) {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("LOCATION SETTINGS")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(Color("SecondaryText"))
+                            .padding(.horizontal, 4)
+
+                        NavigationLink(destination: LocationSettingsView()) {
+                            SettingsRow(
+                                icon: "location.fill",
+                                title: "Location",
+                                value: locationValueText
+                            )
+                        }
+                        .background(Color("CardBackground"))
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                    }
+
                     VStack(alignment: .leading, spacing: 12) {
                         Text("CALCULATION SETTINGS")
                             .font(.caption)
                             .fontWeight(.semibold)
                             .foregroundStyle(Color("SecondaryText"))
                             .padding(.horizontal, 4)
-                        
+
                         VStack(spacing: 0) {
-                            NavigationLink(destination: CalculationMethodSettingsView()) {
+                            NavigationLink(
+                                destination: CalculationMethodSettingsView()
+                            ) {
                                 SettingsRow(
                                     icon: "clock.fill",
                                     title: "Calculation Method",
-                                    value: settingsManager.selectedMethod.displayName
+                                    value: settingsManager.selectedMethod
+                                        .displayName
                                 )
                             }
-                            
+
                             Divider()
                                 .padding(.leading, 56)
-                            
+
                             NavigationLink(destination: MadhabSettingsView()) {
                                 SettingsRow(
                                     icon: "sun.max.fill",
                                     title: "Asr Calculation",
-                                    value: settingsManager.selectedAsrMadhab.displayName
+                                    value: settingsManager.selectedAsrMadhab
+                                        .displayName
                                 )
                             }
                         }
                         .background(Color("CardBackground"))
                         .clipShape(RoundedRectangle(cornerRadius: 16))
                     }
-                    
+
                     VStack(alignment: .leading, spacing: 12) {
                         Text("MOSQUE SETTINGS")
                             .font(.caption)
                             .fontWeight(.semibold)
                             .foregroundStyle(Color("SecondaryText"))
                             .padding(.horizontal, 4)
-                        
+
                         VStack(spacing: 0) {
                             if let mosque = settingsManager.selectedMosque {
                                 Button(action: { showingMosqueSearch = true }) {
@@ -83,21 +128,23 @@ struct SettingsView: View {
                                         value: mosque.name
                                     )
                                 }
-                                
+
                                 Divider()
                                     .padding(.leading, 56)
-                                
-                                Button(action: { settingsManager.selectedMosque = nil }) {
+
+                                Button(action: {
+                                    settingsManager.selectedMosque = nil
+                                }) {
                                     HStack(spacing: 16) {
                                         Image(systemName: "trash.fill")
                                             .font(.system(size: 20))
                                             .frame(width: 24)
                                             .foregroundStyle(.red)
-                                        
+
                                         Text("Remove Selected Mosque")
                                             .font(.body)
                                             .foregroundStyle(.red)
-                                        
+
                                         Spacer()
                                     }
                                     .padding(16)
@@ -115,122 +162,53 @@ struct SettingsView: View {
                         .background(Color("CardBackground"))
                         .clipShape(RoundedRectangle(cornerRadius: 16))
                     }
-                    
-                    Button(action: { settingsManager.onboardingComplete = false }) {
-                        HStack(alignment: .center, spacing: 16) {
-                            Spacer()
-                            Text("Reset Onboarding")
-                                .font(.body)
-                                .foregroundStyle(.red)
-                            Spacer()
+
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("NOTIFICATION SETTINGS")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(Color("SecondaryText"))
+                            .padding(.horizontal, 4)
+
+                        NavigationLink(
+                            destination: NotificationSettingsView(
+                                settingsManager: settingsManager,
+                                notificationManager: notificationManager
+                            )
+                        ) {
+                            SettingsRow(
+                                icon: "bell.fill",
+                                title: "Prayer Notifications",
+                                value: notificationSummary
+                            )
                         }
-                        .padding(16)
+                        .background(Color("CardBackground"))
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
                     }
-                    .background(Color("CardBackground"))
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
+
+                    #if DEBUG
+                        DebugView(
+                            notificationManager: notificationManager,
+                            settingsManager: settingsManager
+                        )
+                    #endif
                 }
-                .padding(20)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 100)
+
             }
         }
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showingMosqueSearch) {
             NavigationStack {
-                MosqueSearchView(selectedMosque: Binding(
-                    get: { settingsManager.selectedMosque },
-                    set: { settingsManager.selectedMosque = $0 }
-                ))
+                MosqueSearchView(
+                    selectedMosque: Binding(
+                        get: { settingsManager.selectedMosque },
+                        set: { settingsManager.selectedMosque = $0 }
+                    )
+                )
             }
         }
-    }
-}
-
-struct SettingsRow: View {
-    let icon: String
-    let title: String
-    let value: String
-    
-    var body: some View {
-        HStack(spacing: 16) {
-            Image(systemName: icon)
-                .font(.system(size: 20))
-                .frame(width: 24)
-                .foregroundStyle(Color("AccentTeal"))
-            
-            Text(title)
-                .font(.body)
-                .foregroundStyle(Color("PrimaryText"))
-                .multilineTextAlignment(.leading)
-            
-            Spacer()
-            
-            Text(value)
-                .font(.subheadline)
-                .foregroundStyle(Color("SecondaryText"))
-            
-            Image(systemName: "chevron.right")
-                .font(.caption)
-                .foregroundStyle(Color("TertiaryText"))
-        }
-        .padding(16)
-    }
-}
-
-struct CalculationMethodSettingsView: View {
-    @State private var settingsManager = SettingsManager.shared
-    @State private var prayerManager = PrayerManager.shared
-    
-    var body: some View {
-        ZStack {
-            Color("Background")
-                .ignoresSafeArea()
-            
-            ScrollView {
-                VStack(spacing: 12) {
-                    ForEach(CalculationPreference.allCases) { preference in
-                        MethodCard(
-                            title: preference.displayName,
-                            isSelected: settingsManager.selectedMethod == preference,
-                            onTap: { prayerManager.updateCalculationMethod(to: preference) }
-                        )
-                    }
-                }
-                .padding(20)
-            }
-        }
-        .navigationTitle("Calculation Method")
-    }
-}
-
-struct MadhabSettingsView: View {
-    @State private var settingsManager = SettingsManager.shared
-    @State private var prayerManager = PrayerManager.shared
-    
-    var body: some View {
-        ZStack {
-            Color("Background")
-                .ignoresSafeArea()
-            
-            ScrollView {
-                VStack(spacing: 12) {
-                    ForEach(MadhabPreference.allCases) { preference in
-                        MethodCard(
-                            title: preference.displayName,
-                            subtitle: preference == .shafi ? "Standard (Earlier)" : "Hanafi (Later)",
-                            isSelected: settingsManager.selectedAsrMadhab == preference,
-                            onTap: { prayerManager.updateAsrMadhab(to: preference) }
-                        )
-                    }
-                }
-                .padding(20)
-            }
-        }
-        .navigationTitle("Asr Calculation")
-    }
-}
-
-#Preview {
-    NavigationStack {
-        SettingsView()
     }
 }

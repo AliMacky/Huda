@@ -19,10 +19,10 @@
  * along with Huda. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Foundation
 import Adhan
+import Foundation
 
-enum CalculationPreference: String, CaseIterable, Identifiable {
+enum CalculationPreference: String, CaseIterable, Identifiable, Codable {
     case dubai
     case egyptian
     case karachi
@@ -35,9 +35,10 @@ enum CalculationPreference: String, CaseIterable, Identifiable {
     case tehran
     case turkey
     case uq
-    
+
     var id: String { self.rawValue }
-    
+
+    /// Represents the enum as a display string
     var displayName: String {
         switch self {
         case .dubai: return "Dubai"
@@ -54,7 +55,7 @@ enum CalculationPreference: String, CaseIterable, Identifiable {
         case .uq: return "Umm Al-Qura"
         }
     }
-    
+
     var packageValue: CalculationMethod {
         switch self {
         case .dubai: return .dubai

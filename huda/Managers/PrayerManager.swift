@@ -19,64 +19,61 @@
  * along with Huda. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Foundation
-import CoreLocation
 import Adhan
+import CoreLocation
+import Foundation
 
 @Observable
 class PrayerManager {
     static let shared = PrayerManager()
     private var settingsManager = SettingsManager.shared
     private var locationManager = LocationManager.shared
-    
+
     var currentPrayerTimes: PrayerTimes?
     var qiblaDirection: Double = 0.0
-    
+
     private init() {}
-    
+
     func calculatePrayers(at location: CLLocationCoordinate2D) {
         var params = settingsManager.selectedMethod.packageValue.params
         params.madhab = settingsManager.selectedAsrMadhab.packageValue
-        
+
         let cal = Calendar(identifier: Calendar.Identifier.gregorian)
         let date = cal.dateComponents([.year, .month, .day], from: Date())
-        let coordinates = Coordinates(latitude: location.latitude, longitude: location.longitude)
-        
-        if let prayers = PrayerTimes(coordinates: coordinates, date: date, calculationParameters: params) {
+        let coordinates = Coordinates(
+            latitude: location.latitude,
+            longitude: location.longitude
+        )
+
+        if let prayers = PrayerTimes(
+            coordinates: coordinates,
+            date: date,
+            calculationParameters: params
+        ) {
             self.currentPrayerTimes = prayers
         }
     }
-    
+
     func calculateQibla(at location: CLLocationCoordinate2D) {
-        let coordinates = Coordinates(latitude: location.latitude, longitude: location.longitude)
+        let coordinates = Coordinates(
+            latitude: location.latitude,
+            longitude: location.longitude
+        )
         let qibla = Qibla(coordinates: coordinates)
         self.qiblaDirection = qibla.direction
     }
-    
+
     func updateCalculationMethod(to calculationMethod: CalculationPreference) {
         settingsManager.selectedMethod = calculationMethod
-        if let location = locationManager.location {
+        if let location = locationManager.effectiveLocation {
             calculatePrayers(at: location)
         }
     }
-    
+
     func updateAsrMadhab(to madhab: MadhabPreference) {
         settingsManager.selectedAsrMadhab = madhab
-        if let location = locationManager.location {
+        if let location = locationManager.effectiveLocation {
             calculatePrayers(at: location)
-        }
-    }
-}
-
-extension Prayer {
-    var localizedName: String {
-        switch self {
-        case .fajr: return "Fajr"
-        case .sunrise: return "Sunrise"
-        case .dhuhr: return "Dhuhr"
-        case .asr: return "Asr"
-        case .maghrib: return "Maghrib"
-        case .isha: return "Isha"
         }
     }
 }

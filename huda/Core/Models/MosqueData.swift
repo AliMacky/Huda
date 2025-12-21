@@ -2,7 +2,7 @@
  * Huda – Islamic iOS app for prayer times and Qibla direction
  * Copyright (C) 2025  Ali Macky
  *
- * Mosque Models.swift
+ * MosqueData.swift
  * This file is part of Huda.
  *
  * Huda is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 
 import Foundation
 
-struct MosqueData: Codable, Identifiable {
+struct MosqueData: Codable, Identifiable, Equatable {
     let id: String
     let name: String
     let city: String
@@ -29,44 +29,16 @@ struct MosqueData: Codable, Identifiable {
     let country: String
     let latitude: String
     let longitude: String
-    
+
     let address: String
     let zipcode: String
     let distance: String?
     let websiteUrl: String?
-    
+
+    /// Map of the JSON return data to variables
     enum CodingKeys: String, CodingKey {
         case websiteUrl = "website_url"
-        case id, name, city, state, country, latitude, longitude, address, zipcode, distance
+        case id, name, city, state, country, latitude, longitude, address,
+            zipcode, distance
     }
-}
-
-struct MosqueSearchResponse: Codable {
-    let items: [MosqueData]
-}
-
-struct DailyPrayers: Codable {
-    let fajr: String
-    let zuhr: String
-    let asr: String
-    let maghrib: String
-    let isha: String
-    let jumuah1: String?
-    let jumuah2: String?
-}
-
-struct MosquePrayerTimes: Codable, Identifiable {
-    var id: String { return "\(mosqueId)-\(date)" }
-    
-    let mosqueId: String
-    let date: String
-    let athan: DailyPrayers
-    let iqama: DailyPrayers
-}
-
-struct MosqueIqamaState {
-    let prayerName: String
-    let iqamaTime: String
-    let timeUntil: String
-    let minutesAfterAdhan: Int
 }

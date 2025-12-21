@@ -19,28 +19,81 @@
  * along with Huda. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Foundation
 import CoreLocation
-import SwiftUI
+import Foundation
 import MapKit
+import SwiftUI
 
 @Observable
 class LocationManager: NSObject, CLLocationManagerDelegate {
     static let shared = LocationManager()
     private let manager = CLLocationManager()
-    
+
     var location: CLLocationCoordinate2D?
     var locationTitle: String?
     var status: CLAuthorizationStatus = .notDetermined
     var heading: Double = 0.0
     var headingAccuracy: Double = -1
-    
+
+    var effectiveLocation: CLLocationCoordinate2D? {
+        let settings = SettingsManager.shared
+        switch settings.locationMode {
+        case .automatic:
+            return location
+        case .manual:
+            if let lat = settings.manualLocationLatitude,
+               let lon = settings.manualLocationLongitude {
+                return CLLocationCoordinate2D(latitude: lat, longitude: lon)
+            }
+            return nil
+        }
+    }
+
+    var effectiveLocationTitle: String? {
+        let settings = SettingsManager.shared
+        switch settings.locationMode {
+        case .automatic:
+            return locationTitle
+        case .manual:
+            return settings.manualLocationTitle
+        }
+    }
+
+    var effectiveTimezone: TimeZone {
+        let settings = SettingsManager.shared
+        switch settings.locationMode {
+        case .automatic:
+            return .current
+        case .manual:
+            if let tzId = settings.manualLocationTimezone,
+               let tz = TimeZone(identifier: tzId) {
+                return tz
+            }
+            return .current
+        }
+    }
+
+    func setManualLocation(
+        latitude: Double,
+        longitude: Double,
+        title: String,
+        timezone: String
+    ) {
+        let settings = SettingsManager.shared
+        settings.manualLocationLatitude = latitude
+        settings.manualLocationLongitude = longitude
+        settings.manualLocationTitle = title
+        settings.manualLocationTimezone = timezone
+        settings.locationMode = .manual
+        recalculateWithCurrentMode()
+    }
+
     private let cacheKeys = (
         lat: "cachedLocationLatitude",
         lon: "cachedLocationLongitude",
         title: "cachedLocationTitle"
     )
-    
+
     override private init() {
         super.init()
         manager.delegate = self
@@ -48,18 +101,18 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         manager.distanceFilter = 1000
         manager.headingFilter = 1
     }
-    
+
     func requestPermission() {
         manager.requestWhenInUseAuthorization()
     }
-    
+
     func start() {
         manager.startUpdatingLocation()
     }
-    
+
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         self.status = manager.authorizationStatus
-        
+
         if status == .authorizedWhenInUse || status == .authorizedAlways {
             if !NetworkMonitor.shared.isConnected {
                 loadCachedLocation()
@@ -68,12 +121,15 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             }
         }
     }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+
+    func locationManager(
+        _ manager: CLLocationManager,
+        didUpdateLocations locations: [CLLocation]
+    ) {
         guard let latestLocation = locations.last else { return }
         self.location = latestLocation.coordinate
         saveLocationToCache(latestLocation.coordinate)
-        
+
         Task {
             let title = try await latestLocation.fetchCityWithContext()
             await MainActor.run {
@@ -81,67 +137,89 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
                 saveTitleToCache(title)
             }
         }
-        
-        PrayerManager.shared.calculatePrayers(at: latestLocation.coordinate)
-        PrayerManager.shared.calculateQibla(at: latestLocation.coordinate)
+
+        if SettingsManager.shared.locationMode == .automatic {
+            PrayerManager.shared.calculatePrayers(at: latestLocation.coordinate)
+            PrayerManager.shared.calculateQibla(at: latestLocation.coordinate)
+        }
     }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+
+    func locationManager(
+        _ manager: CLLocationManager,
+        didUpdateHeading newHeading: CLHeading
+    ) {
         self.headingAccuracy = newHeading.headingAccuracy
         if newHeading.headingAccuracy >= 0 {
             self.heading = newHeading.magneticHeading
         }
     }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+
+    func locationManager(
+        _ manager: CLLocationManager,
+        didFailWithError error: Error
+    ) {
         print("Location Error: \(error.localizedDescription)")
     }
-    
+
     func startUpdatingHeading() {
         if CLLocationManager.headingAvailable() {
             manager.startUpdatingHeading()
         }
     }
-    
+
     func stopUpdatingHeading() {
         manager.stopUpdatingHeading()
     }
-    
+
+    func recalculateWithCurrentMode() {
+        guard let coordinate = effectiveLocation else { return }
+        PrayerManager.shared.calculatePrayers(at: coordinate)
+        PrayerManager.shared.calculateQibla(at: coordinate)
+        Task {
+            await NotificationManager.shared.scheduleAllNotifications()
+        }
+    }
+
     private func saveLocationToCache(_ coordinate: CLLocationCoordinate2D) {
         UserDefaults.standard.set(coordinate.latitude, forKey: cacheKeys.lat)
         UserDefaults.standard.set(coordinate.longitude, forKey: cacheKeys.lon)
     }
-    
+
     private func saveTitleToCache(_ title: String) {
         UserDefaults.standard.set(title, forKey: cacheKeys.title)
     }
-    
+
     private func loadCachedLocation() {
         let lat = UserDefaults.standard.double(forKey: cacheKeys.lat)
         let lon = UserDefaults.standard.double(forKey: cacheKeys.lon)
         let title = UserDefaults.standard.string(forKey: cacheKeys.title)
-        
+
         guard lat != 0 || lon != 0 else { return }
-        
-        let cachedCoordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+
+        let cachedCoordinate = CLLocationCoordinate2D(
+            latitude: lat,
+            longitude: lon
+        )
         self.location = cachedCoordinate
-        
+
         if let title = title {
             self.locationTitle = title
         }
-        
+
         PrayerManager.shared.calculatePrayers(at: cachedCoordinate)
         PrayerManager.shared.calculateQibla(at: cachedCoordinate)
     }
 }
 
 extension CLLocation {
+    /// Fetches the city name and details for the location, i.e. Seattle, WA or Seville, Sevilla
     func fetchCityWithContext() async throws -> (String) {
         guard let request = MKReverseGeocodingRequest(location: self),
-              let addressRepresentations = try await request.mapItems.first?.addressRepresentations else {
+            let addressRepresentations = try await request.mapItems.first?
+                .addressRepresentations
+        else {
             throw MKError(.decodingFailed)
         }
         return (addressRepresentations.cityWithContext ?? "")
     }
 }
-

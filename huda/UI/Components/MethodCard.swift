@@ -26,37 +26,35 @@ struct MethodCard: View {
     var subtitle: String? = nil
     let isSelected: Bool
     let onTap: () -> Void
-    
+
     var body: some View {
         Button(action: onTap) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)
                         .font(.body)
-                        .fontWeight(.medium)
                         .foregroundStyle(Color("PrimaryText"))
-                    
+
                     if let subtitle = subtitle {
                         Text(subtitle)
                             .font(.caption)
                             .foregroundStyle(Color("SecondaryText"))
                     }
                 }
-                
+
                 Spacer()
-                
+
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundStyle(Color("AccentTeal"))
-                        .font(.title3)
                 }
             }
-            .padding(20)
+            .padding()
             .background(
-                RoundedRectangle(cornerRadius: 16)
+                RoundedRectangle(cornerRadius: 12)
                     .fill(Color("CardBackground"))
                     .overlay(
-                        RoundedRectangle(cornerRadius: 16)
+                        RoundedRectangle(cornerRadius: 12)
                             .stroke(
                                 isSelected ? Color("AccentTeal") : Color.clear,
                                 lineWidth: 2

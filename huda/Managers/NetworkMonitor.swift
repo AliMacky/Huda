@@ -26,25 +26,28 @@ import Network
 class NetworkMonitor {
     static let shared = NetworkMonitor()
     private let monitor = NWPathMonitor()
-    private let queue = DispatchQueue(label: "NetworkMonitor", qos: .userInitiated)
-    
+    private let queue = DispatchQueue(
+        label: "NetworkMonitor",
+        qos: .userInitiated
+    )
+
     var isConnected: Bool = true
-    
+
     private init() {
         let semaphore = DispatchSemaphore(value: 0)
         var initialStatus: NWPath.Status = .satisfied
-        
+
         monitor.pathUpdateHandler = { [weak self] path in
             initialStatus = path.status
             semaphore.signal()
-            
+
             DispatchQueue.main.async {
                 self?.isConnected = (path.status == .satisfied)
             }
         }
-        
+
         monitor.start(queue: queue)
-        
+
         _ = semaphore.wait(timeout: .now() + 0.5)
         isConnected = (initialStatus == .satisfied)
     }

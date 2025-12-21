@@ -2,7 +2,7 @@
  * Huda – Islamic iOS app for prayer times and Qibla direction
  * Copyright (C) 2025  Ali Macky
  *
- * SecretsManager.swift
+ * PrayerNotificationMode.swift
  * This file is part of Huda.
  *
  * Huda is free software: you can redistribute it and/or modify
@@ -21,30 +21,27 @@
 
 import Foundation
 
-struct Secrets {
-    static var masjidalApiBaseUrl: String {
-        guard let path = Bundle.main.path(forResource: "Info", ofType: "plist"),
-            let dict = NSDictionary(contentsOfFile: path) as? [String: Any],
-            let key = dict["Masjidal Api Base Url"] as? String
-        else {
+enum PrayerNotificationMode: String, CaseIterable, Identifiable, Codable {
+    case off = "off"
+    case silent = "silent"
+    case athan = "athan"
 
-            fatalError("API Key not found in Info.plist")
+    var id: String { rawValue }
+
+    /// Represents the enum as a display string
+    var displayName: String {
+        switch self {
+        case .off: return "Off"
+        case .silent: return "Silent"
+        case .athan: return "Athan"
         }
-        return "https://" + key
-    }
-}
-
-struct AppInfo {
-    static var version: String {
-        return Bundle.main.infoDictionary?["CFBundleShortVersionString"]
-            as? String ?? "1.0"
     }
 
-    static var build: String {
-        return Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
-    }
-
-    static var fullVersionString: String {
-        return "v\(version) (\(build))"
+    var icon: String {
+        switch self {
+        case .off: return "bell.slash"
+        case .silent: return "bell"
+        case .athan: return "bell.and.waves.left.and.right"
+        }
     }
 }

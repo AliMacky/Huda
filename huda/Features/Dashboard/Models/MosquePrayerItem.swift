@@ -2,7 +2,7 @@
  * Huda – Islamic iOS app for prayer times and Qibla direction
  * Copyright (C) 2025  Ali Macky
  *
- * LoadingView.swift
+ * MosquePrayerItem.swift
  * This file is part of Huda.
  *
  * Huda is free software: you can redistribute it and/or modify
@@ -19,24 +19,14 @@
  * along with Huda. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import SwiftUI
+import Foundation
 
-struct LoadingView: View {
-    @State private var opacity: Double = 0
-    
-    var body: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "moon.stars.fill")
-                .font(.system(size: 48))
-                .foregroundStyle(Color("AccentTeal").opacity(0.7))
-            
-            Text("Huda")
-                .font(.system(size: 42, weight: .bold, design: .default))
-                .foregroundStyle(Color("PrimaryText").opacity(0.6))
-        }
-    }
-}
-
-#Preview {
-    LoadingView()
+struct MosquePrayerItem: Identifiable {
+    let id = UUID()
+    let name: String
+    let time: String
+    let iqamaTime: String
+    let arabicName: String
+    let passed: Bool
+    let icon: String
 }
