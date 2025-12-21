@@ -34,6 +34,7 @@ struct hudaApp: App {
 
     private var isReady: Bool {
         locationManager.effectiveLocation != nil
+            && locationManager.effectiveLocationTitle != nil
             && prayerManager.currentPrayerTimes != nil
     }
 
@@ -62,7 +63,15 @@ struct hudaApp: App {
                 scheduleBackgroundTask()
             } else if newPhase == .active
                 && settingsManager.notificationsEnabled
+                && isReady
             {
+                Task {
+                    await notificationManager.scheduleAllNotifications()
+                }
+            }
+        }
+        .onChange(of: isReady) { _, ready in
+            if ready && settingsManager.notificationsEnabled {
                 Task {
                     await notificationManager.scheduleAllNotifications()
                 }
