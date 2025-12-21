@@ -34,7 +34,9 @@ struct TimesView: View {
     var timeManager = TimeManager.shared
 
     private var prayerTimesForDate: PrayerTimes? {
-        guard let location = locationManager.effectiveLocation else { return nil }
+        guard let location = locationManager.effectiveLocation else {
+            return nil
+        }
 
         var params = settingsManager.selectedMethod.packageValue.params
         params.madhab = settingsManager.selectedAsrMadhab.packageValue
@@ -65,7 +67,7 @@ struct TimesView: View {
             let formatter = DateFormatter()
             formatter.dateFormat = "h:mm a"
             formatter.timeZone = locationManager.effectiveTimezone
-            
+
             return prayersToShow.map { prayer in
                 let prayerTime = times.time(for: prayer)
 
@@ -237,7 +239,8 @@ struct TimesView: View {
 
                             Spacer()
 
-                            if let location = locationManager.effectiveLocation {
+                            if let location = locationManager.effectiveLocation
+                            {
                                 VStack(alignment: .trailing, spacing: 2) {
                                     Text(
                                         locationManager.effectiveLocationTitle

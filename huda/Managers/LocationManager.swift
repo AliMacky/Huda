@@ -42,7 +42,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             return location
         case .manual:
             if let lat = settings.manualLocationLatitude,
-               let lon = settings.manualLocationLongitude {
+                let lon = settings.manualLocationLongitude
+            {
                 return CLLocationCoordinate2D(latitude: lat, longitude: lon)
             }
             return nil
@@ -66,7 +67,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             return .current
         case .manual:
             if let tzId = settings.manualLocationTimezone,
-               let tz = TimeZone(identifier: tzId) {
+                let tz = TimeZone(identifier: tzId)
+            {
                 return tz
             }
             return .current

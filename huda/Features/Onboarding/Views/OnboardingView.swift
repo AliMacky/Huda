@@ -28,6 +28,7 @@ struct OnboardingView: View {
     @State private var currentPage = 0
     @State private var selectedPreference: CalculationPreference = .na
     @State private var selectedMadhab: MadhabPreference = .shafi
+    @State private var useAdvancedCalculation: Bool = false
     @State private var tempSelectedMosque: MosqueData?
 
     private var settingsManager = SettingsManager.shared
@@ -52,17 +53,12 @@ struct OnboardingView: View {
 
                     CalculationMethodPage(
                         selectedPreference: $selectedPreference,
+                        selectedMadhab: $selectedMadhab,
+                        useAdvancedCalculation: $useAdvancedCalculation,
                         onNext: { currentPage = 3 },
                         currentPage: $currentPage
                     )
                     .tag(2)
-
-                    MadhabPage(
-                        selectedMadhab: $selectedMadhab,
-                        onNext: { currentPage = 4 },
-                        currentPage: $currentPage
-                    )
-                    .tag(3)
 
                     NotificationPage(
                         onNext: {
@@ -73,11 +69,11 @@ struct OnboardingView: View {
                                 await notificationManager
                                     .scheduleAllNotifications()
                             }
-                            currentPage = 5
+                            currentPage = 4
                         },
                         currentPage: $currentPage
                     )
-                    .tag(4)
+                    .tag(3)
 
                     MosquePage(
                         selectedMosque: $tempSelectedMosque,
@@ -86,7 +82,7 @@ struct OnboardingView: View {
                         },
                         currentPage: $currentPage
                     )
-                    .tag(5)
+                    .tag(4)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .indexViewStyle(.page(backgroundDisplayMode: .never))
@@ -95,7 +91,10 @@ struct OnboardingView: View {
     }
 
     func saveSettings() {
-        prayerManager.updateCalculationMethod(to: selectedPreference)
+        settingsManager.useAdvancedCalculation = useAdvancedCalculation
+        if !useAdvancedCalculation {
+            prayerManager.updateCalculationMethod(to: selectedPreference)
+        }
         prayerManager.updateAsrMadhab(to: selectedMadhab)
         settingsManager.selectedMosque = tempSelectedMosque
         settingsManager.onboardingComplete = true

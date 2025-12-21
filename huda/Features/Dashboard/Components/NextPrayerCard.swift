@@ -77,9 +77,9 @@ struct NextPrayerCard: View {
 
                     if let endTimeStr = formattedEndTime {
                         Text("• \(endTimeStr)")
-                        .font(.subheadline)
-                        .foregroundStyle(Color("SecondaryText"))
-                        .lineLimit(1)
+                            .font(.subheadline)
+                            .foregroundStyle(Color("SecondaryText"))
+                            .lineLimit(1)
                     }
                 }
                 .minimumScaleFactor(0.8)

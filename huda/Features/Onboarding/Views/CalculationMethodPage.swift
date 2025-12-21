@@ -23,13 +23,18 @@ import SwiftUI
 
 struct CalculationMethodPage: View {
     @Binding var selectedPreference: CalculationPreference
+    @Binding var selectedMadhab: MadhabPreference
+    @Binding var useAdvancedCalculation: Bool
     let onNext: () -> Void
     @Binding var currentPage: Int
+
+    @State private var settingsManager = SettingsManager.shared
+    @State private var showAdvancedSettings = false
 
     var body: some View {
         VStack(spacing: 0) {
             VStack(spacing: 12) {
-                Text("Calculation Method")
+                Text("Prayer Calculation")
                     .font(.title)
                     .fontWeight(.bold)
                     .foregroundStyle(Color("PrimaryText"))
@@ -45,16 +50,21 @@ struct CalculationMethodPage: View {
             .padding(.top, 10)
 
             ScrollView {
-                VStack(spacing: 12) {
-                    ForEach(CalculationPreference.allCases) { preference in
-                        MethodCard(
-                            title: preference.displayName,
-                            isSelected: selectedPreference == preference,
-                            onTap: { selectedPreference = preference }
-                        )
-                    }
+                VStack(spacing: 24) {
+                    CalculationMethodSelector(
+                        selectedMethod: $selectedPreference,
+                        useAdvancedCalculation: $useAdvancedCalculation,
+                        customParameters: settingsManager
+                            .customCalculationParameters,
+                        onAdvancedTap: { showAdvancedSettings = true }
+                    )
+
+                    AsrMadhabSelector(
+                        selectedMadhab: $selectedMadhab
+                    )
                 }
                 .padding(.horizontal, 24)
+                .padding(.top, 20)
                 .padding(.bottom, 140)
             }
 
@@ -83,6 +93,11 @@ struct CalculationMethodPage: View {
                 Color("Background")
                     .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: -5)
             )
+        }
+        .sheet(isPresented: $showAdvancedSettings) {
+            NavigationStack {
+                AdvancedCalculationSettingsView()
+            }
         }
     }
 }

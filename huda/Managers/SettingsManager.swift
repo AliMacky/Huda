@@ -149,6 +149,34 @@ class SettingsManager {
         set { settings.manualLocationTimezone = newValue }
     }
 
+    var useAdvancedCalculation: Bool {
+        get { settings.useAdvancedCalculation }
+        set {
+            settings.useAdvancedCalculation = newValue
+            recalculatePrayers()
+            Task {
+                await NotificationManager.shared.scheduleAllNotifications()
+            }
+        }
+    }
+
+    var customCalculationParameters: CustomCalculationParameters {
+        get { settings.customCalculationParameters }
+        set {
+            settings.customCalculationParameters = newValue
+            recalculatePrayers()
+            Task {
+                await NotificationManager.shared.scheduleAllNotifications()
+            }
+        }
+    }
+
+    private func recalculatePrayers() {
+        if let location = LocationManager.shared.effectiveLocation {
+            PrayerManager.shared.calculatePrayers(at: location)
+        }
+    }
+
     private func save() {
         if let encoded = try? JSONEncoder().encode(settings) {
             UserDefaults.standard.set(encoded, forKey: "app_settings")

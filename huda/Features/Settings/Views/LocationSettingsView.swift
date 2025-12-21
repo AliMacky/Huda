@@ -220,7 +220,8 @@ struct LocationSettingsView: View {
         return "Unknown Location"
     }
 
-    private func formatCoordinates(_ coordinate: CLLocationCoordinate2D) -> String
+    private func formatCoordinates(_ coordinate: CLLocationCoordinate2D)
+        -> String
     {
         let lat = String(format: "%.4f", coordinate.latitude)
         let lon = String(format: "%.4f", coordinate.longitude)
