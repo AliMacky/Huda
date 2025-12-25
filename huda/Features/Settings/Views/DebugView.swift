@@ -53,11 +53,18 @@ struct DebugView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("DEBUG")
-                .font(.caption)
-                .fontWeight(.semibold)
-                .foregroundStyle(Color("SecondaryText"))
-                .padding(.horizontal, 4)
+            HStack {
+                Text("DEBUG")
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(Color("SecondaryText"))
+                    .padding(.horizontal, 4)
+
+                Text("\(Bundle.main.formattedVersion)")
+                    .font(.caption2)
+                    .foregroundStyle(Color("TertiaryText"))
+                    .padding(.horizontal, 4)
+            }
 
             VStack(spacing: 0) {
                 Button(action: {
@@ -192,13 +199,6 @@ struct DebugView: View {
             }
             .background(Color("CardBackground"))
             .clipShape(RoundedRectangle(cornerRadius: 16))
-
-            Text(
-                "Tip: To test background refresh in Xcode, use Debug → Simulate Background Fetch"
-            )
-            .font(.caption2)
-            .foregroundStyle(Color("TertiaryText"))
-            .padding(.horizontal, 4)
         }
         .task(updatePendingCount)
     }
