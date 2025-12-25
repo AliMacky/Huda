@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if ! which swiftformat >/dev/null; then
+  echo "warning: SwiftFormat not installed. Skipping auto-format."
+  exit 0
+fi
+
+files=$(git diff --cached --name-only --diff-filter=d | grep "\.swift$")
+
+if [ -z "$files" ]; then
+  exit 0
+fi
+
+echo "Running SwiftFormat on staged files"
+
+IFS=$'\n'
+for file in $files; do
+  swiftformat "$file"
+  git add "$file"
+done
+unset IFS
