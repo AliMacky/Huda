@@ -1,6 +1,6 @@
 /*
  * Huda – Islamic iOS app for prayer times and Qibla direction
- * Copyright (C) 2025  Ali Macky
+ * Copyright (C) {current.year}  Ali Macky
  *
  * TimesMethodInfoView.swift
  * This file is part of Huda.
