@@ -19,8 +19,8 @@
  * along with Huda. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import SwiftUI
 import Adhan
+import SwiftUI
 
 struct TimesPrayerList: View {
     let selectedView: Int

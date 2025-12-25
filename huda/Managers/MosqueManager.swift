@@ -66,7 +66,7 @@ class MosqueManager {
         let hasToday = decoded.contains { $0.date == todayString }
 
         if hasToday {
-            self.prayerTimes = decoded
+            prayerTimes = decoded
             return true
         } else {
             return false
@@ -154,16 +154,16 @@ class MosqueManager {
 
         let components = calendar.dateComponents([.year, .month], from: now)
         guard let startOfMonth = calendar.date(from: components),
-            let nextMonth = calendar.date(
-                byAdding: .month,
-                value: 1,
-                to: startOfMonth
-            ),
-            let endOfMonth = calendar.date(
-                byAdding: .day,
-                value: -1,
-                to: nextMonth
-            )
+              let nextMonth = calendar.date(
+                  byAdding: .month,
+                  value: 1,
+                  to: startOfMonth
+              ),
+              let endOfMonth = calendar.date(
+                  byAdding: .day,
+                  value: -1,
+                  to: nextMonth
+              )
         else { return }
 
         let fromStr = startOfMonth.formatted(
@@ -197,8 +197,8 @@ class MosqueManager {
 
             let flattenedList: [MosquePrayerTimes] = decodedResponse.items
                 .flatMap { mosqueItem in
-                    return mosqueItem.times.map { day in
-                        return MosquePrayerTimes(
+                    mosqueItem.times.map { day in
+                        MosquePrayerTimes(
                             mosqueId: mosqueItem.id,
                             date: day.date,
                             athan: day.salah,
@@ -222,8 +222,7 @@ class MosqueManager {
         }
     }
 
-    func getNextIqama(for date: Date = Date()) -> MosquePrayerTimes.IqamaState?
-    {
+    func getNextIqama(for date: Date = Date()) -> MosquePrayerTimes.IqamaState? {
         guard !prayerTimes.isEmpty else { return nil }
 
         let fullFormatter = DateFormatter()
@@ -233,8 +232,7 @@ class MosqueManager {
         let now = date
         let calendar = Calendar.current
 
-        func checkPrayers(for lookupDate: Date) -> MosquePrayerTimes.IqamaState?
-        {
+        func checkPrayers(for lookupDate: Date) -> MosquePrayerTimes.IqamaState? {
             let lookupFormatter = DateFormatter()
             lookupFormatter.dateFormat = "EEEE, MMM d, yyyy"
             lookupFormatter.locale = Locale(identifier: "en_US_POSIX")
@@ -262,9 +260,8 @@ class MosqueManager {
                 let athanString = "\(daySchedule.date) \(p.athan)"
 
                 if let iqamaDate = fullFormatter.date(from: iqamaString),
-                    let athanDate = fullFormatter.date(from: athanString)
+                   let athanDate = fullFormatter.date(from: athanString)
                 {
-
                     if iqamaDate > now {
                         let diff = iqamaDate.timeIntervalSince(now)
                         let hours = Int(diff) / 3600

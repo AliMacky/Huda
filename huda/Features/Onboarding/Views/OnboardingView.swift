@@ -19,10 +19,10 @@
  * along with Huda. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import AVFoundation
-import Adhan
-import SwiftUI
 import _LocationEssentials
+import Adhan
+import AVFoundation
+import SwiftUI
 
 struct OnboardingView: View {
     @State private var currentPage = 0

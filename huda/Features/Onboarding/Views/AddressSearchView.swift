@@ -204,7 +204,7 @@ struct AddressSearchView: View {
 
     private func formatLocationTitle(from item: MKMapItem) -> String {
         if let representations = item.addressRepresentations,
-            let cityContext = representations.cityWithContext
+           let cityContext = representations.cityWithContext
         {
             return cityContext
         }
@@ -236,7 +236,7 @@ private class SearchCompleter: NSObject, MKLocalSearchCompleterDelegate {
     }
 
     func completer(
-        _ completer: MKLocalSearchCompleter,
+        _: MKLocalSearchCompleter,
         didFailWithError error: Error
     ) {
         print("Completer Error: \(error.localizedDescription)")

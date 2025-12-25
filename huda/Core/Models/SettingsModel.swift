@@ -44,5 +44,5 @@ struct SettingsModel: Codable, Equatable {
     var manualLocationTimezone: String? = nil
     var useAdvancedCalculation: Bool = false
     var customCalculationParameters: CustomCalculationParameters =
-        CustomCalculationParameters()
+        .init()
 }

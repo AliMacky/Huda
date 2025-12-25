@@ -27,7 +27,7 @@ struct TimesHeaderView: View {
     private var weekDates: [Date] {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
-        return (0..<7).compactMap {
+        return (0 ..< 7).compactMap {
             calendar.date(byAdding: .day, value: $0, to: today)
         }
     }

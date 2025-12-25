@@ -42,7 +42,7 @@ struct PrayersCard: View {
                 Spacer()
 
                 HStack(spacing: 4) {
-                    ForEach(0..<5) { index in
+                    ForEach(0 ..< 5) { index in
                         let isPassed =
                             index < prayers.count && prayers[index].passed
 
@@ -64,7 +64,7 @@ struct PrayersCard: View {
             VStack(spacing: 0) {
                 ForEach(Array(prayers.enumerated()), id: \.element.id) {
                     index,
-                    prayer in
+                        prayer in
                     HStack(spacing: 16) {
                         ZStack {
                             Circle()

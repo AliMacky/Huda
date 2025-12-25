@@ -6,9 +6,9 @@
  * This file is part of Huda.
  */
 
+import _LocationEssentials
 import Adhan
 import SwiftUI
-import _LocationEssentials
 
 struct TimesView: View {
     @State private var selectedDate = Date()
@@ -72,7 +72,7 @@ struct TimesView: View {
             }
         } else {
             return prayersToShow.map { prayer in
-                return PrayerItem(
+                PrayerItem(
                     name: prayer.localizedName,
                     time: "--:--",
                     arabicName: arabicName(for: prayer),
@@ -137,7 +137,7 @@ struct TimesView: View {
             let iqamaString = "\(daySchedule.date) \(prayer.iqama)"
             let isPassed: Bool
             if Calendar.current.isDate(selectedDate, inSameDayAs: Date()),
-                let iqamaDate = fullFormatter.date(from: iqamaString)
+               let iqamaDate = fullFormatter.date(from: iqamaString)
             {
                 isPassed = timeManager.now > iqamaDate
             } else {

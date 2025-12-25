@@ -26,7 +26,7 @@ enum MadhabPreference: String, CaseIterable, Identifiable, Codable {
     case shafi
     case hanafi
 
-    var id: String { self.rawValue }
+    var id: String { rawValue }
 
     /// Represents the enum as a display string
     var displayName: String {

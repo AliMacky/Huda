@@ -47,7 +47,6 @@ class TimeManager {
             withTimeInterval: TimeInterval(secondsUntilNextMinute),
             repeats: false
         ) { [weak self] _ in
-
             self?.now = Date()
 
             self?.timer = Timer.scheduledTimer(

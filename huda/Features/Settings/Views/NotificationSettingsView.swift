@@ -58,7 +58,7 @@ struct NotificationSettingsView: View {
                                 NotificationSettingsRow(
                                     prayerName: prayer.name,
                                     prayerKey: prayer.key,
-                                    settingsManager: settingsManager,
+                                    settingsManager: settingsManager
                                 )
                             }
                         }

@@ -121,7 +121,7 @@ struct NextPrayerCard: View {
 
     private var progress: Double {
         guard let start = state?.startTime,
-            let end = state?.endTime
+              let end = state?.endTime
         else { return 0.0 }
 
         let totalDuration = end.timeIntervalSince(start)

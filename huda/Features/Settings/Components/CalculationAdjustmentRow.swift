@@ -41,7 +41,7 @@ struct CalculationAdjustmentRow: View {
             Stepper(
                 "",
                 value: $value,
-                in: -30...30,
+                in: -30 ... 30,
                 step: 1
             )
             .labelsHidden()

@@ -78,7 +78,7 @@ class NotificationManager {
         let calendar = Calendar(identifier: .gregorian)
         let today = Date()
 
-        for dayOffset in 0..<daysToSchedule {
+        for dayOffset in 0 ..< daysToSchedule {
             guard
                 let date = calendar.date(
                     byAdding: .day,

@@ -40,7 +40,7 @@ struct hudaApp: App {
 
     init() {
         registerBackgroundTask()
-        
+
         if settingsManager.locationMode == .manual {
             locationManager.recalculateWithCurrentMode()
         }
@@ -58,7 +58,7 @@ struct hudaApp: App {
                 OnboardingView()
             }
         }
-        .onChange(of: scenePhase) { oldPhase, newPhase in
+        .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .background {
                 scheduleBackgroundTask()
             } else if newPhase == .active

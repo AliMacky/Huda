@@ -27,7 +27,7 @@ enum HighLatitudeRulePreference: String, CaseIterable, Identifiable, Codable {
     case seventhOfTheNight
     case twilightAngle
 
-    var id: String { self.rawValue }
+    var id: String { rawValue }
 
     var displayName: String {
         switch self {
@@ -71,5 +71,5 @@ struct CustomCalculationParameters: Codable, Equatable {
     var ishaAngle: Double = 17.0
     var ishaInterval: Int? = nil
     var highLatitudeRule: HighLatitudeRulePreference = .middleOfTheNight
-    var adjustments: PrayerAdjustmentsModel = PrayerAdjustmentsModel()
+    var adjustments: PrayerAdjustmentsModel = .init()
 }

@@ -22,9 +22,9 @@
 import Foundation
 
 enum PrayerNotificationMode: String, CaseIterable, Identifiable, Codable {
-    case off = "off"
-    case silent = "silent"
-    case athan = "athan"
+    case off
+    case silent
+    case athan
 
     var id: String { rawValue }
 
