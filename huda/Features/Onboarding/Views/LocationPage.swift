@@ -150,7 +150,7 @@ struct LocationPage: View {
                 InfoRow(
                     icon: "exclamationmark.triangle.fill",
                     text:
-                        "Even with a manual address, location permission is needed for the Qibla compass heading"
+                    "Even with a manual address, location permission is needed for the Qibla compass heading"
                 )
             }
         }

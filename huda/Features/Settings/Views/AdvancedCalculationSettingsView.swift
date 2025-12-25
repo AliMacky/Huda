@@ -44,7 +44,7 @@ struct AdvancedCalculationSettingsView: View {
                                 title: "Fajr Angle",
                                 value: $settingsManager
                                     .customCalculationParameters.fajrAngle,
-                                range: 10...25
+                                range: 10 ... 25
                             )
 
                             Divider()
@@ -54,7 +54,7 @@ struct AdvancedCalculationSettingsView: View {
                                 title: "Isha Angle",
                                 value: $settingsManager
                                     .customCalculationParameters.ishaAngle,
-                                range: 10...25
+                                range: 10 ... 25
                             )
                         }
                         .background(Color("CardBackground"))
@@ -114,7 +114,7 @@ struct AdvancedCalculationSettingsView: View {
                                                 .ishaInterval = $0
                                         }
                                     ),
-                                    range: 30...180
+                                    range: 30 ... 180
                                 )
                             }
                         }

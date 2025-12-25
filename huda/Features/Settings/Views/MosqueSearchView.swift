@@ -19,8 +19,8 @@
  * along with Huda. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import SwiftUI
 import _LocationEssentials
+import SwiftUI
 
 struct MosqueSearchView: View {
     @Binding var selectedMosque: MosqueData?
@@ -83,7 +83,7 @@ struct MosqueSearchView: View {
                                         .foregroundStyle(Color("SecondaryText"))
 
                                     if let dist = mosque.distance,
-                                        dist != "0.00"
+                                       dist != "0.00"
                                     {
                                         Text("\(dist) miles away")
                                             .font(.caption2)

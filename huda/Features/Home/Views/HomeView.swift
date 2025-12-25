@@ -19,9 +19,9 @@
  * along with Huda. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import _LocationEssentials
 import Adhan
 import SwiftUI
-import _LocationEssentials
 
 struct HomeView: View {
     private var locationManager = LocationManager.shared
@@ -53,7 +53,7 @@ struct HomeView: View {
             }
         } else {
             return prayersToShow.map { prayer in
-                return PrayerItem(
+                PrayerItem(
                     name: prayer.localizedName,
                     time: "--:--",
                     arabicName: arabicName(for: prayer),

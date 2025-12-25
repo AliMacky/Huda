@@ -34,7 +34,7 @@ class SettingsManager {
     }
 
     private init() {
-        self.settings = SettingsManager.load()
+        settings = SettingsManager.load()
     }
 
     var onboardingComplete: Bool {
@@ -112,8 +112,7 @@ class SettingsManager {
         return settings.prayerNotificationModes[key] ?? .athan
     }
 
-    func setNotificationMode(_ mode: PrayerNotificationMode, for prayer: Prayer)
-    {
+    func setNotificationMode(_ mode: PrayerNotificationMode, for prayer: Prayer) {
         let key = prayer.localizedName
         settings.prayerNotificationModes[key] = mode
         Task {
@@ -185,10 +184,10 @@ class SettingsManager {
 
     private static func load() -> SettingsModel {
         if let data = UserDefaults.standard.data(forKey: "app_settings"),
-            let decoded = try? JSONDecoder().decode(
-                SettingsModel.self,
-                from: data
-            )
+           let decoded = try? JSONDecoder().decode(
+               SettingsModel.self,
+               from: data
+           )
         {
             return decoded
         }

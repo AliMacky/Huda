@@ -43,7 +43,6 @@ func arabicName(for prayer: Adhan.Prayer) -> String {
 }
 
 extension Prayer {
-
     /// Represents the enum as a display string
     var localizedName: String {
         switch self {

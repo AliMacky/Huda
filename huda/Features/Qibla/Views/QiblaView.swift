@@ -19,8 +19,8 @@
  * along with Huda. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import SwiftUI
 import _LocationEssentials
+import SwiftUI
 
 struct QiblaView: View {
     var prayerManager = PrayerManager.shared
@@ -55,7 +55,6 @@ struct QiblaView: View {
                     coordinates: locationManager.effectiveLocation
                 )
             }
-
         }
         .padding(.horizontal, 24)
         .padding(.bottom, 100)

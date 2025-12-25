@@ -39,6 +39,6 @@ struct MosqueData: Codable, Identifiable, Equatable {
     enum CodingKeys: String, CodingKey {
         case websiteUrl = "website_url"
         case id, name, city, state, country, latitude, longitude, address,
-            zipcode, distance
+             zipcode, distance
     }
 }

@@ -21,20 +21,19 @@
 
 import Foundation
 
-struct Secrets {
+enum Secrets {
     static var masjidalApiBaseUrl: String {
         guard let path = Bundle.main.path(forResource: "Info", ofType: "plist"),
-            let dict = NSDictionary(contentsOfFile: path) as? [String: Any],
-            let key = dict["Masjidal Api Base Url"] as? String
+              let dict = NSDictionary(contentsOfFile: path) as? [String: Any],
+              let key = dict["Masjidal Api Base Url"] as? String
         else {
-
             fatalError("API Key not found in Info.plist")
         }
         return "https://" + key
     }
 }
 
-struct AppInfo {
+enum AppInfo {
     static var version: String {
         return Bundle.main.infoDictionary?["CFBundleShortVersionString"]
             as? String ?? "1.0"

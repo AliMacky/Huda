@@ -28,7 +28,7 @@ struct QiblaDial: View {
     private var isAligned: Bool {
         let normalized =
             ((relativeDirection.truncatingRemainder(dividingBy: 360)) + 360)
-            .truncatingRemainder(dividingBy: 360)
+                .truncatingRemainder(dividingBy: 360)
         return normalized < 5 || normalized > 355
     }
 
@@ -52,7 +52,7 @@ struct QiblaDial: View {
                 .foregroundStyle(isAligned ? Color.green : Color("AccentTeal"))
                 .rotationEffect(.degrees(relativeDirection))
         }
-        .onChange(of: isAligned) { oldValue, newValue in
+        .onChange(of: isAligned) { _, newValue in
             if newValue {
                 let generator = UINotificationFeedbackGenerator()
                 generator.notificationOccurred(.success)

@@ -42,7 +42,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             return location
         case .manual:
             if let lat = settings.manualLocationLatitude,
-                let lon = settings.manualLocationLongitude
+               let lon = settings.manualLocationLongitude
             {
                 return CLLocationCoordinate2D(latitude: lat, longitude: lon)
             }
@@ -67,7 +67,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             return .current
         case .manual:
             if let tzId = settings.manualLocationTimezone,
-                let tz = TimeZone(identifier: tzId)
+               let tz = TimeZone(identifier: tzId)
             {
                 return tz
             }
@@ -113,7 +113,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     }
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        self.status = manager.authorizationStatus
+        status = manager.authorizationStatus
 
         if status == .authorizedWhenInUse || status == .authorizedAlways {
             if !NetworkMonitor.shared.isConnected {
@@ -125,11 +125,11 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     }
 
     func locationManager(
-        _ manager: CLLocationManager,
+        _: CLLocationManager,
         didUpdateLocations locations: [CLLocation]
     ) {
         guard let latestLocation = locations.last else { return }
-        self.location = latestLocation.coordinate
+        location = latestLocation.coordinate
         saveLocationToCache(latestLocation.coordinate)
 
         Task {
@@ -147,17 +147,17 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     }
 
     func locationManager(
-        _ manager: CLLocationManager,
+        _: CLLocationManager,
         didUpdateHeading newHeading: CLHeading
     ) {
-        self.headingAccuracy = newHeading.headingAccuracy
+        headingAccuracy = newHeading.headingAccuracy
         if newHeading.headingAccuracy >= 0 {
-            self.heading = newHeading.magneticHeading
+            heading = newHeading.magneticHeading
         }
     }
 
     func locationManager(
-        _ manager: CLLocationManager,
+        _: CLLocationManager,
         didFailWithError error: Error
     ) {
         print("Location Error: \(error.localizedDescription)")
@@ -202,10 +202,10 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             latitude: lat,
             longitude: lon
         )
-        self.location = cachedCoordinate
+        location = cachedCoordinate
 
         if let title = title {
-            self.locationTitle = title
+            locationTitle = title
         }
 
         PrayerManager.shared.calculatePrayers(at: cachedCoordinate)
@@ -217,11 +217,11 @@ extension CLLocation {
     /// Fetches the city name and details for the location, i.e. Seattle, WA or Seville, Sevilla
     func fetchCityWithContext() async throws -> (String) {
         guard let request = MKReverseGeocodingRequest(location: self),
-            let addressRepresentations = try await request.mapItems.first?
-                .addressRepresentations
+              let addressRepresentations = try await request.mapItems.first?
+              .addressRepresentations
         else {
             throw MKError(.decodingFailed)
         }
-        return (addressRepresentations.cityWithContext ?? "")
+        return addressRepresentations.cityWithContext ?? ""
     }
 }

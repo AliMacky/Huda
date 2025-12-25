@@ -65,7 +65,7 @@ class PrayerManager {
             date: date,
             calculationParameters: params
         ) {
-            self.currentPrayerTimes = prayers
+            currentPrayerTimes = prayers
         }
     }
 
@@ -75,7 +75,7 @@ class PrayerManager {
             longitude: location.longitude
         )
         let qibla = Qibla(coordinates: coordinates)
-        self.qiblaDirection = qibla.direction
+        qiblaDirection = qibla.direction
     }
 
     func updateCalculationMethod(to calculationMethod: CalculationPreference) {

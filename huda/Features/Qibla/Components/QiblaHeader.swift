@@ -19,8 +19,8 @@
  * along with Huda. If not, see <https://www.gnu.org/licenses/>.
  */
 
-import SwiftUI
 import _LocationEssentials
+import SwiftUI
 
 struct QiblaHeader: View {
     var locationManager = LocationManager.shared
