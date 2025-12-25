@@ -10,12 +10,16 @@ To build and run this project, you need:
 * A valid Apple ID (for signing).
 
 ## Development Setup
-**Clone the repository**:
+1. **Clone the repository**:
  ```bash
 git clone [https://github.com/AliMacky/Huda.git](https://github.com/AliMacky Huda.git) 
  cd Huda
 ``` 
-2. **Configuration (Secrets):** This project uses an `.xcconfig` file to secure API keys. You must create this file manually as it is ignored by Git. 
+2. After cloning the repo, please run this command to enable auto-formatting:
+```bash
+git config core.hooksPath .githooks
+```
+3. **Configuration (Secrets):** This project uses an `.xcconfig` file to secure API keys. You must create this file manually as it is ignored by Git. 
 * Create a file named `Secrets.xcconfig` in the root project folder. 
 * Add the following keys (replace with your actual API credentials):
  ```text 
@@ -23,8 +27,8 @@ git clone [https://github.com/AliMacky/Huda.git](https://github.com/AliMacky Hud
  // Note: Do not include "https://" in the Base URL to avoid xcconfig comment issues.
 MASJIDAL_API_BASE_URL = 
 ``` 
-3. **Open Project:** Open `Huda.xcodeproj` in Xcode. 
-4. **Build & Run:** Select your target simulator (e.g., iPhone 15 Pro) and press `Cmd + R`. 
+4. **Open Project:** Open `Huda.xcodeproj` in Xcode. 
+5. **Build & Run:** Select your target simulator (e.g., iPhone 15 Pro) and press `Cmd + R`. 
 > Note: If running on the Simulator, ensure you simulate a location via **Features > Location** in the Simulator menu bar to test Prayer Times.
 5. See `CONTRIBUTING.md` for a guide on how to contribute to this project.
 
@@ -46,4 +50,5 @@ This means:
 
 A full copy of the GNU GPL-3.0 license is available in the `LICENSE` file or at:  
 https://www.gnu.org/licenses/gpl-3.0.html
+
 
