@@ -168,6 +168,24 @@ struct TimesView: View {
         }
     }
 
+    private var jummahTimes: (jummah1: String?, jummah2: String?)? {
+        guard !mosqueManager.prayerTimes.isEmpty else { return nil }
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE, MMM d, yyyy"
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        let dateString = dateFormatter.string(from: selectedDate)
+
+        guard let daySchedule = mosqueManager.prayerTimes.first(where: { $0.date == dateString }) else {
+            return nil
+        }
+
+        let j1 = daySchedule.iqama.jummah1 != "-" ? daySchedule.iqama.jummah1 : nil
+        let j2 = daySchedule.iqama.jummah2 != "-" ? daySchedule.iqama.jummah2 : nil
+
+        return (j1, j2)
+    }
+
     private var hijriDateString: String {
         let hijri = Calendar(identifier: .islamicUmmAlQura)
         let formatter = DateFormatter()
@@ -201,6 +219,7 @@ struct TimesView: View {
                         selectedView: selectedView,
                         prayers: prayers,
                         mosquePrayers: mosquePrayers,
+                        jummahTimes: jummahTimes,
                         settingsManager: settingsManager
                     )
                 }

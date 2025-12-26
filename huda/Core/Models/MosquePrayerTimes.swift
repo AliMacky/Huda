@@ -36,8 +36,9 @@ struct MosquePrayerTimes: Codable, Identifiable {
         let asr: String
         let maghrib: String
         let isha: String
-        let jumuah1: String?
-        let jumuah2: String?
+        let jummah1: String?
+        let jummah2: String?
+        let jummah3: String?
     }
 
     /// Represents the state of the upcoming Iqama relative to the current time

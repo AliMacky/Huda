@@ -62,10 +62,14 @@ class MosqueManager {
             return false
         }
 
-        let todayString = apiDateFormatter.string(from: Date())
-        let hasToday = decoded.contains { $0.date == todayString }
+        let calendar = Calendar.current
+        guard let oneWeekAhead = calendar.date(byAdding: .day, value: 7, to: Date()) else {
+            return false
+        }
+        let oneWeekAheadString = apiDateFormatter.string(from: oneWeekAhead)
+        let hasOneWeekAhead = decoded.contains { $0.date == oneWeekAheadString }
 
-        if hasToday {
+        if hasOneWeekAhead {
             prayerTimes = decoded
             return true
         } else {
@@ -152,24 +156,17 @@ class MosqueManager {
         let calendar = Calendar.current
         let now = Date()
 
-        let components = calendar.dateComponents([.year, .month], from: now)
-        guard let startOfMonth = calendar.date(from: components),
-              let nextMonth = calendar.date(
-                  byAdding: .month,
-                  value: 1,
-                  to: startOfMonth
-              ),
-              let endOfMonth = calendar.date(
-                  byAdding: .day,
-                  value: -1,
-                  to: nextMonth
-              )
+        guard let twoMonthsAhead = calendar.date(
+            byAdding: .month,
+            value: 2,
+            to: now
+        )
         else { return }
 
-        let fromStr = startOfMonth.formatted(
+        let fromStr = now.formatted(
             .iso8601.year().month().day().dateSeparator(.dash)
         )
-        let toStr = endOfMonth.formatted(
+        let toStr = twoMonthsAhead.formatted(
             .iso8601.year().month().day().dateSeparator(.dash)
         )
 
