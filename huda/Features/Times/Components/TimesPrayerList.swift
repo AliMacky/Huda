@@ -26,6 +26,7 @@ struct TimesPrayerList: View {
     let selectedView: Int
     let prayers: [PrayerItem]
     let mosquePrayers: [MosquePrayerItem]?
+    let jummahTimes: (jummah1: String?, jummah2: String?)?
     var settingsManager: SettingsManager
 
     var body: some View {
@@ -59,6 +60,47 @@ struct TimesPrayerList: View {
                                 .background(Color("PrimaryText").opacity(0.05))
                                 .padding(.leading, 60)
                         }
+                    }
+
+                    if let jummah = jummahTimes,
+                       jummah.jummah1 != nil || jummah.jummah2 != nil
+                    {
+                        Divider()
+                            .background(Color("PrimaryText").opacity(0.05))
+
+                        HStack(spacing: 0) {
+                            if let j1 = jummah.jummah1 {
+                                VStack(spacing: 2) {
+                                    Text(j1)
+                                        .font(.subheadline)
+                                        .fontWeight(.semibold)
+                                        .foregroundStyle(Color("AccentTeal"))
+                                    Text("Jumu'ah 1")
+                                        .font(.caption2)
+                                        .foregroundStyle(Color("SecondaryText"))
+                                }
+                                .frame(maxWidth: .infinity)
+                            }
+
+                            if jummah.jummah1 != nil && jummah.jummah2 != nil {
+                                Divider()
+                                    .frame(height: 30)
+                            }
+
+                            if let j2 = jummah.jummah2 {
+                                VStack(spacing: 2) {
+                                    Text(j2)
+                                        .font(.subheadline)
+                                        .fontWeight(.semibold)
+                                        .foregroundStyle(Color("AccentTeal"))
+                                    Text("Jumu'ah 2")
+                                        .font(.caption2)
+                                        .foregroundStyle(Color("SecondaryText"))
+                                }
+                                .frame(maxWidth: .infinity)
+                            }
+                        }
+                        .padding(.vertical, 12)
                     }
                 }
                 .padding(.vertical, 12)
