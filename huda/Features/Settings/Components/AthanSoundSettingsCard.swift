@@ -44,6 +44,7 @@ struct AthanSoundSettingsCard: View {
                 .foregroundStyle(
                     isSelected ? Color("AccentTeal") : Color("SecondaryText")
                 )
+                .accessibilityHidden(true)
 
                 Text(sound.displayName)
                     .font(.body)
@@ -56,6 +57,7 @@ struct AthanSoundSettingsCard: View {
                         .font(.body)
                         .foregroundStyle(Color("AccentTeal"))
                         .symbolEffect(.variableColor.iterative)
+                        .accessibilityHidden(true)
                 }
             }
             .padding(16)
@@ -71,5 +73,15 @@ struct AthanSoundSettingsCard: View {
                     )
             )
         }
+        .accessibilityLabel(accessibilityDescription)
+        .accessibilityAddTraits(isSelected ? [.isSelected] : [])
+    }
+
+    private var accessibilityDescription: String {
+        var description = sound.displayName
+        if isPlaying {
+            description += ", currently playing"
+        }
+        return description
     }
 }

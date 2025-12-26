@@ -180,10 +180,10 @@ struct TimesView: View {
             return nil
         }
 
-        let j1 = daySchedule.iqama.jummah1 != "-" ? daySchedule.iqama.jummah1 : nil
-        let j2 = daySchedule.iqama.jummah2 != "-" ? daySchedule.iqama.jummah2 : nil
+        let jummuah1 = daySchedule.iqama.jummah1 != "-" ? daySchedule.iqama.jummah1 : nil
+        let jummuah2 = daySchedule.iqama.jummah2 != "-" ? daySchedule.iqama.jummah2 : nil
 
-        return (j1, j2)
+        return (jummuah1, jummuah2)
     }
 
     private var hijriDateString: String {

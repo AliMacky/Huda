@@ -82,6 +82,7 @@ struct PrayersCard: View {
                                         : Color("AccentOrange")
                                 )
                         }
+                        .accessibilityHidden(true)
 
                         VStack(alignment: .leading, spacing: 2) {
                             Text(prayer.name.capitalized)
@@ -106,6 +107,7 @@ struct PrayersCard: View {
                                 Image(systemName: "checkmark.circle.fill")
                                     .font(.caption)
                                     .foregroundStyle(Color("AccentPurple"))
+                                    .accessibilityHidden(true)
                             }
 
                             Text(prayer.time)
@@ -120,6 +122,8 @@ struct PrayersCard: View {
                     }
                     .padding(.horizontal, 20)
                     .padding(.vertical, 12)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("\(prayer.name), \(prayer.time)\(prayer.passed ? ", completed" : "")")
 
                     if index < prayers.count - 1 {
                         Divider()

@@ -127,6 +127,7 @@ struct SettingsView: View {
                                             .font(.system(size: 20))
                                             .frame(width: 24)
                                             .foregroundStyle(.red)
+                                            .accessibilityHidden(true)
 
                                         Text("Remove Selected Mosque")
                                             .font(.body)
@@ -136,6 +137,8 @@ struct SettingsView: View {
                                     }
                                     .padding(16)
                                 }
+                                .accessibilityLabel("Remove Selected Mosque")
+                                .accessibilityHint("Removes the current mosque selection")
                             } else {
                                 Button(action: { showingMosqueSearch = true }) {
                                     SettingsRow(

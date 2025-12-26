@@ -105,6 +105,17 @@ struct NextPrayerCard: View {
                         )
                 )
         )
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(accessibilityDescription)
+    }
+
+    private var accessibilityDescription: String {
+        guard let state = state else { return "Next prayer: Calculating" }
+        let timeRemaining = timeString
+        if let endTime = formattedEndTime {
+            return "Next prayer: \(state.name) in \(timeRemaining), at \(endTime)"
+        }
+        return "Next prayer: \(state.name) in \(timeRemaining)"
     }
 
     private var timeString: String {

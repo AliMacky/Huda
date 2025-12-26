@@ -36,6 +36,7 @@ struct Header: View {
                         HStack(spacing: 4) {
                             Image(systemName: "wifi.slash")
                                 .font(.system(size: 10, weight: .semibold))
+                                .accessibilityHidden(true)
                             Text("Offline")
                                 .font(.caption2)
                                 .fontWeight(.semibold)
@@ -57,12 +58,27 @@ struct Header: View {
                 .fontWeight(.semibold)
                 .foregroundStyle(Color("PrimaryText"))
             }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel(headerAccessibilityLabel)
             Spacer()
             NavigationLink(destination: SettingsView()) {
                 Image(systemName: "gear")
                     .font(.title2)
                     .foregroundStyle(Color("SecondaryText"))
             }
+            .accessibilityLabel("Settings")
+            .accessibilityHint("Opens app settings")
         }
+    }
+
+    private var headerAccessibilityLabel: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE, MMMM d"
+        let dateString = dateFormatter.string(from: Date())
+        var label = "\(locationTitle ?? "Unknown"), \(dateString)"
+        if !isConnected {
+            label += ", offline mode"
+        }
+        return label
     }
 }

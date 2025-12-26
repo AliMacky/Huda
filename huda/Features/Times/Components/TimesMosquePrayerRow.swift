@@ -42,6 +42,7 @@ struct TimesMosquePrayerRow: View {
                             : Color("AccentOrange")
                     )
             }
+            .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(prayer.name)
@@ -64,6 +65,7 @@ struct TimesMosquePrayerRow: View {
                         Image(systemName: "checkmark.circle.fill")
                             .font(.caption)
                             .foregroundStyle(Color("AccentPurple"))
+                            .accessibilityHidden(true)
                     }
 
                     Text(prayer.time)
@@ -89,5 +91,15 @@ struct TimesMosquePrayerRow: View {
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 12)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(accessibilityDescription)
+    }
+
+    private var accessibilityDescription: String {
+        var description = "\(prayer.name), athan at \(prayer.time), iqama at \(prayer.iqamaTime)"
+        if prayer.passed {
+            description += ", completed"
+        }
+        return description
     }
 }

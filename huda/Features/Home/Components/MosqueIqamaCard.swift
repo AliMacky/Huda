@@ -47,6 +47,7 @@ struct MosqueIqamaCard: View {
 
                 Image(systemName: "location.fill")
                     .foregroundStyle(Color("AccentTeal"))
+                    .accessibilityHidden(true)
             }
 
             Divider()
@@ -87,5 +88,18 @@ struct MosqueIqamaCard: View {
             RoundedRectangle(cornerRadius: 24)
                 .fill(Color("CardBackground"))
         )
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(accessibilityDescription)
+    }
+
+    private var accessibilityDescription: String {
+        var description = "Mosque iqama at \(mosqueDetails.name)."
+        if let prayer = nextPrayerName, let time = nextIqamaTime {
+            description += " \(prayer) iqama at \(time)"
+        }
+        if let timeUntil = timeUntilIqama {
+            description += ", \(timeUntil)"
+        }
+        return description
     }
 }

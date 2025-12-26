@@ -31,6 +31,7 @@ struct InfoRow: View {
                 .font(.system(size: 16))
                 .foregroundStyle(Color("AccentTeal"))
                 .frame(width: 24)
+                .accessibilityHidden(true)
 
             Text(text)
                 .font(.subheadline)
@@ -39,5 +40,6 @@ struct InfoRow: View {
 
             Spacer()
         }
+        .accessibilityElement(children: .combine)
     }
 }

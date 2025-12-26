@@ -81,6 +81,7 @@ struct LocationPage: View {
             Image(systemName: iconName)
                 .font(.system(size: 80))
                 .foregroundStyle(Color("AccentTeal"))
+                .accessibilityHidden(true)
         }
     }
 
@@ -180,6 +181,7 @@ struct LocationPage: View {
                             .fill(Color("AccentTeal"))
                     )
             }
+            .accessibilityHint("Requests permission to use your location for prayer times")
 
             Text("Select \"While Using the App\" when prompted")
                 .font(.caption)

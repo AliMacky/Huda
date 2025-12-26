@@ -80,5 +80,17 @@ struct WeekDayButton: View {
                     )
             )
         }
+        .accessibilityLabel(accessibilityDateLabel)
+        .accessibilityAddTraits(isSelected ? [.isSelected] : [])
+    }
+
+    private var accessibilityDateLabel: String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .full
+        let fullDate = formatter.string(from: date)
+        if isToday {
+            return "\(fullDate), today"
+        }
+        return fullDate
     }
 }
