@@ -51,11 +51,14 @@ struct DirectionCard: View {
             Image(systemName: "safari")
                 .font(.system(size: 32))
                 .foregroundStyle(Color("AccentTeal").opacity(0.3))
+                .accessibilityHidden(true)
         }
         .padding(20)
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color("CardBackground"))
         )
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Qibla direction: \(Int(qiblaDirection)) degrees, \(cardinalDirection)")
     }
 }

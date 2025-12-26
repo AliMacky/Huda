@@ -59,6 +59,7 @@ struct NotificationSettingsRow: View {
                         VStack(spacing: 4) {
                             Image(systemName: mode.icon)
                                 .font(.system(size: 16))
+                                .accessibilityHidden(true)
                             Text(mode.displayName)
                                 .font(.caption2)
                         }
@@ -84,6 +85,8 @@ struct NotificationSettingsRow: View {
                                 )
                         )
                     }
+                    .accessibilityLabel("\(prayerName) \(mode.displayName)")
+                    .accessibilityAddTraits(currentMode == mode ? [.isSelected] : [])
                 }
             }
         }

@@ -32,6 +32,7 @@ struct TimesViewToggle: View {
                 HStack(spacing: 8) {
                     Image(systemName: "location.fill")
                         .font(.caption)
+                        .accessibilityHidden(true)
                     Text("My Location")
                         .font(.subheadline)
                         .fontWeight(.medium)
@@ -52,6 +53,9 @@ struct TimesViewToggle: View {
                         )
                 )
             }
+            .accessibilityLabel("My Location")
+            .accessibilityHint("Shows prayer times for your current location")
+            .accessibilityAddTraits(selectedView == 0 ? [.isSelected] : [])
 
             Button(action: {
                 withAnimation { selectedView = 1 }
@@ -59,6 +63,7 @@ struct TimesViewToggle: View {
                 HStack(spacing: 8) {
                     Image(systemName: "building.2.fill")
                         .font(.caption)
+                        .accessibilityHidden(true)
                     Text("Mosque")
                         .font(.subheadline)
                         .fontWeight(.medium)
@@ -79,6 +84,9 @@ struct TimesViewToggle: View {
                         )
                 )
             }
+            .accessibilityLabel("Mosque")
+            .accessibilityHint("Shows prayer times for your selected mosque")
+            .accessibilityAddTraits(selectedView == 1 ? [.isSelected] : [])
         }
         .padding(4)
         .background(

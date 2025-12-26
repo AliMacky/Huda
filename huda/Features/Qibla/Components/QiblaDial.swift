@@ -52,11 +52,28 @@ struct QiblaDial: View {
                 .foregroundStyle(isAligned ? Color.green : Color("AccentTeal"))
                 .rotationEffect(.degrees(relativeDirection))
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Qibla compass")
+        .accessibilityValue(accessibilityDirectionDescription)
+        .accessibilityAddTraits(.updatesFrequently)
         .onChange(of: isAligned) { _, newValue in
             if newValue {
                 let generator = UINotificationFeedbackGenerator()
                 generator.notificationOccurred(.success)
             }
+        }
+    }
+
+    private var accessibilityDirectionDescription: String {
+        if isAligned {
+            return "Aligned with Qibla direction"
+        }
+        let direction = relativeDirection.truncatingRemainder(dividingBy: 360)
+        let normalizedDirection = direction < 0 ? direction + 360 : direction
+        if normalizedDirection <= 180 {
+            return "Turn right \(Int(normalizedDirection)) degrees"
+        } else {
+            return "Turn left \(Int(360 - normalizedDirection)) degrees"
         }
     }
 }

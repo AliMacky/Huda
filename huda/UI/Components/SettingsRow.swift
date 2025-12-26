@@ -32,6 +32,7 @@ struct SettingsRow: View {
                 .font(.system(size: 20))
                 .frame(width: 24)
                 .foregroundStyle(Color("AccentTeal"))
+                .accessibilityHidden(true)
 
             Text(title)
                 .font(.body)
@@ -47,7 +48,10 @@ struct SettingsRow: View {
             Image(systemName: "chevron.right")
                 .font(.caption)
                 .foregroundStyle(Color("TertiaryText"))
+                .accessibilityHidden(true)
         }
         .padding(16)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(title), \(value)")
     }
 }

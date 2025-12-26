@@ -30,6 +30,7 @@ struct LocationCard: View {
         HStack {
             Image(systemName: "location.fill")
                 .foregroundStyle(Color("AccentOrange"))
+                .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text("Your Location")
@@ -57,5 +58,17 @@ struct LocationCard: View {
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color("CardBackground").opacity(0.6))
         )
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(accessibilityDescription)
+    }
+
+    private var accessibilityDescription: String {
+        var description = "Your location: \(locationTitle ?? "Unknown")"
+        if let location = coordinates {
+            let latDir = location.latitude >= 0 ? "North" : "South"
+            let lonDir = location.longitude >= 0 ? "East" : "West"
+            description += ", coordinates: \(String(format: "%.2f", abs(location.latitude))) degrees \(latDir), \(String(format: "%.2f", abs(location.longitude))) degrees \(lonDir)"
+        }
+        return description
     }
 }

@@ -32,6 +32,7 @@ struct WelcomePage: View {
                 Image(systemName: "moon.stars.circle.fill")
                     .font(.system(size: 80))
                     .foregroundStyle(Color("AccentTeal"))
+                    .accessibilityHidden(true)
 
                 VStack(spacing: 12) {
                     Text("Welcome to Huda")

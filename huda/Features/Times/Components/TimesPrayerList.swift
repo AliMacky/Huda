@@ -69,9 +69,9 @@ struct TimesPrayerList: View {
                             .background(Color("PrimaryText").opacity(0.05))
 
                         HStack(spacing: 0) {
-                            if let j1 = jummah.jummah1 {
+                            if let jummuah1 = jummah.jummah1 {
                                 VStack(spacing: 2) {
-                                    Text(j1)
+                                    Text(jummuah1)
                                         .font(.subheadline)
                                         .fontWeight(.semibold)
                                         .foregroundStyle(Color("AccentTeal"))
@@ -80,6 +80,8 @@ struct TimesPrayerList: View {
                                         .foregroundStyle(Color("SecondaryText"))
                                 }
                                 .frame(maxWidth: .infinity)
+                                .accessibilityElement(children: .combine)
+                                .accessibilityLabel("Jumu'ah 1 at \(jummuah1)")
                             }
 
                             if jummah.jummah1 != nil && jummah.jummah2 != nil {
@@ -87,9 +89,9 @@ struct TimesPrayerList: View {
                                     .frame(height: 30)
                             }
 
-                            if let j2 = jummah.jummah2 {
+                            if let jummuah2 = jummah.jummah2 {
                                 VStack(spacing: 2) {
-                                    Text(j2)
+                                    Text(jummuah2)
                                         .font(.subheadline)
                                         .fontWeight(.semibold)
                                         .foregroundStyle(Color("AccentTeal"))
@@ -98,6 +100,8 @@ struct TimesPrayerList: View {
                                         .foregroundStyle(Color("SecondaryText"))
                                 }
                                 .frame(maxWidth: .infinity)
+                                .accessibilityElement(children: .combine)
+                                .accessibilityLabel("Jumu'ah 2 at \(jummuah2)")
                             }
                         }
                         .padding(.vertical, 12)

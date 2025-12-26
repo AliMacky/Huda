@@ -82,6 +82,7 @@ struct TabBar: View {
                     VStack(spacing: 4) {
                         Image(systemName: tab.rawValue)
                             .font(.system(size: 20))
+                            .accessibilityHidden(true)
 
                         Text(tab.title)
                             .font(.caption2)
@@ -92,6 +93,9 @@ struct TabBar: View {
                             ? Color("AccentTeal") : Color("SecondaryText")
                     )
                 }
+                .accessibilityLabel(tab.title)
+                .accessibilityHint("Double tap to switch to \(tab.title)")
+                .accessibilityAddTraits(selected == tab ? [.isSelected] : [])
             }
         }
         .padding(.vertical, 12)

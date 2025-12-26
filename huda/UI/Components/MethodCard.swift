@@ -47,6 +47,7 @@ struct MethodCard: View {
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundStyle(Color("AccentTeal"))
+                        .accessibilityHidden(true)
                 }
             }
             .padding()
@@ -62,5 +63,14 @@ struct MethodCard: View {
                     )
             )
         }
+        .accessibilityLabel(accessibilityDescription)
+        .accessibilityAddTraits(isSelected ? [.isSelected] : [])
+    }
+
+    private var accessibilityDescription: String {
+        if let subtitle = subtitle {
+            return "\(title), \(subtitle)"
+        }
+        return title
     }
 }
